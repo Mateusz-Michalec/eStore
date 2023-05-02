@@ -1,0 +1,68 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button {
+  box-shadow: none;
+  border: none;
+  background: none;
+
+  &:focus {
+    outline: 1px solid black;
+  }
+}
+
+i {
+  color: black;
+}
+
+.nav-link-icon {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+}
+
+// Boottrap overwriting
+
+.navbar-brand {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 5px;
+
+  &:active,
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.nav-link {
+  color: black;
+}
+
+.form-control {
+  border: none;
+
+  &:active,
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.nav-search {
+  flex-grow: 1;
+}
