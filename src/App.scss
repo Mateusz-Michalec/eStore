@@ -6,6 +6,10 @@
   color: #003467;
 }
 
+.main-bg {
+  background: #003467;
+}
+
 .section-1-bg {
   background: #f7ebde;
 }
@@ -25,6 +29,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.overlay {
+  z-index: 10;
+  background: $black;
+  opacity: 0.5;
+  position: fixed;
+  inset: 0;
 }
 
 body {
@@ -64,35 +76,6 @@ img {
   }
 }
 
-.ls-1 {
-  letter-spacing: 1px;
-}
-
-.ls-2 {
-  letter-spacing: 2px;
-}
-
-.fs-7 {
-  font-size: 0.7rem;
-}
-
-.flex-grow-1 {
-  flex-grow: 1;
-}
-
-.flex-100 {
-  flex-basis: 100%;
-}
-
-.right-corner {
-  top: 20px;
-  right: 20px;
-}
-
-.pointer-none {
-  pointer-events: none;
-}
-
 // Home
 
 .hero-body {
@@ -116,7 +99,7 @@ img {
 
 .nav-link,
 .link,
-.nav-icon,
+i,
 a {
   &:hover,
   &:active,
@@ -170,12 +153,37 @@ a {
 
 // End Bootstrap Overwriting
 
+.product-preview {
+  &-img {
+    height: 10rem;
+  }
+  &-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.bottom-right {
+  bottom: 10px;
+  right: 10px;
+}
+
 .max-800 {
   max-width: 800px;
 }
 
+.min-80 {
+  min-width: 80px;
+}
+
 .max-vh-35 {
   max-height: 35vh;
+}
+
+.vh-30 {
+  min-height: 30vh;
+  max-height: 30vh;
 }
 
 .img-cover {
@@ -188,6 +196,84 @@ a {
 
 .pointer {
   cursor: pointer;
+}
+
+.disabled {
+  pointer-events: none;
+  background: rgb(228, 228, 228);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.ls-1 {
+  letter-spacing: 1px;
+}
+
+.ls-2 {
+  letter-spacing: 2px;
+}
+
+.fs-7 {
+  font-size: 0.8rem;
+}
+
+.fs-8 {
+  font-size: 0.5rem;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.flex-100 {
+  flex-basis: 100%;
+}
+
+.right-corner {
+  top: 20px;
+  right: 20px;
+}
+
+.badge-dimens {
+  width: 18px;
+  height: 18px;
+}
+
+.bage-positon {
+  top: 15px;
+  left: 10px;
+}
+
+.pointer-none {
+  pointer-events: none;
+}
+
+.selected {
+  background: $dark;
+  color: $white;
+}
+
+button:hover {
+  .dropdown-arrow {
+    color: white;
+  }
+}
+
+dialog {
+  z-index: 12;
+}
+
+@media screen and (max-width: 972px) {
+  .sizes-dialog {
+    z-index: 15;
+    position: fixed;
+    bottom: 0;
+  }
+}
+
+@media screen and (min-width: 972px) {
+  .sizes-dialog-container {
+    position: relative;
+  }
 }
 
 .glow {

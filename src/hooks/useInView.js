@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
 
-export default function useInView(refs) {
-  const [elements, setElements] = useState([]);
+export default function useInView(ref, data) {
+  const [isIntersecting, setIsIntersecting] = useState();
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target.id;
-        if (entry.isIntersecting)
-          setElements((prev) => [...prev, { [element]: true }]);
-        else setElements((prev) => [...prev, { [element]: false }]);
-      });
+      if (entries[0].isIntersecting) setIsIntersecting(true);
+      else setIsIntersecting(false);
     });
 
-    refs.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
+    if (ref.current) observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [ref, data]);
 
-  return elements;
+  return isIntersecting;
 }

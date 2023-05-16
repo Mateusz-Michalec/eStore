@@ -1,46 +1,67 @@
-import React, { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
+import React, { useContext, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import { Alert, Breadcrumb, Modal, ModalBody, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ImagePlaceholder from "../components/ImagePlaceholder";
 import DataContext from "../context/dataContext";
 import useTimeoutAlert from "../hooks/useTimeoutAlert";
-import { roundHalf, usdToPLN } from "../utils";
+import { roundHalf } from "../utils";
+import useInView from "../hooks/useInView";
+import Sizes from "../components/Sizes";
 
-export default function CategoryProducts() {
-  function getRandomSizes() {
-    const getRandomNumber = () => Math.floor(Math.random() * 15);
+export default function Product() {
+  // Data Context
+  const {
+    toggleFavoriteProduct,
+    checkIsAlreadyAdded,
+    favorites,
+    products,
+    addToCart,
+  } = useContext(DataContext);
+  // Data Context End
 
-    return [
-      { xs: getRandomNumber() },
-      { s: getRandomNumber() },
-      { m: getRandomNumber() },
-      { l: getRandomNumber() },
-      { xl: getRandomNumber() },
-      { xxl: getRandomNumber() },
-    ];
-  }
-
-  // Fetch
-  const navigate = useNavigate();
+  // Get Product
   const { id } = useParams();
-  const [product, error] = useFetch(`https://fakestoreapi.com/products/${id}`);
-  if (error) navigate("/");
-  // End Fetch
+  const product = products?.find((item) => item.id === Number(id));
+  // Get Product End
 
-  const [sizes, setSizes] = useState(getRandomSizes());
+  // AddToCart Btn intersecting
+  const addToCartRef = useRef();
+  const sizesRef = useRef();
+  const isIntersectingSizes = useInView(sizesRef, product);
+  // AddToCart Btn intersecting end
 
-  console.log(product);
+  // AddToCart
+  function handleAddToCart() {
+    if (selectedSize) {
+      setIsSizeSelected(true);
+      addToCart((prev) => [...prev, { ...product, size: selectedSize }]);
+    } else {
+      window.scrollTo({ top: sizesRef.current.offsetTop - 100 });
+      setIsSizeSelected(false);
+    }
+  }
+  // AddToCart End
+
+  // Sizes
+  const [isLowSizes, setIsLowSizes] = useState();
+  const [selectedSize, setSelectedSize] = useState();
+  const [isSizeSelected, setIsSizeSelected] = useState();
+
+  function handleSizeSelect(e) {
+    setSelectedSize(e.currentTarget.id);
+    setIsSizeSelected(true);
+  }
+  // Sizes End
 
   // Modal Img
   const [showModalImg, setShowModalImg] = useState(false);
   const handleCloseModalImg = () => setShowModalImg(false);
   const handleShowModalImg = () => setShowModalImg(true);
-  // End Modal Img
+  // Modal Img End
 
   // Favorite Product
-  const { toggleFavoriteProduct, checkIsFavorite } = useContext(DataContext);
   const [alertShow, setAlertShow] = useTimeoutAlert(1500);
 
   function handleFavorite(e) {
@@ -50,18 +71,17 @@ export default function CategoryProducts() {
   }
 
   let isFavorite;
-  if (product) isFavorite = checkIsFavorite(product);
-
-  // End Favorite Product
+  if (product) isFavorite = checkIsAlreadyAdded(product, favorites);
+  // Favorite Product End
 
   function renderStarRating() {
     const stars = [];
     let rating = roundHalf(product.rating.rate);
     const isHalf = rating % 2 !== 0;
     if (isHalf) rating = rating - 0.5;
+    let icon;
 
     for (let i = 0; i < 5; i++) {
-      let icon;
       if (i < rating) icon = "bi-star-fill";
       else if (i == rating && isHalf) icon = "bi-star-half";
       else icon = "bi-star";
@@ -128,17 +148,58 @@ export default function CategoryProducts() {
             <img src={product.image} alt={product.title} className="w-100" />
           </section>
           <section>
-            <div>
-              <span>Ocena {product.rating.rate}</span>
+            <div className="mt-1">
+              <span className="fs-7">
+                Ocena {product.rating.rate} ({product.rating.count} recenzji)
+              </span>
               <Stack direction="horizontal" gap={2}>
                 {renderStarRating()}
               </Stack>
             </div>
-            <h1 className="h5 mt-4">{product.title}</h1>
-            <h2 className="h6 mt-2 opacity-75">
-              {usdToPLN(product.price)} PLN
-            </h2>
+            <h1 className="h5 mt-2">{product.title}</h1>
+            <h2 className="h6 mt-2 text-danger">{product.price} PLN</h2>
           </section>
+          <section className="mt-3" ref={sizesRef}>
+            <Stack direction="horizontal" className="mb-2">
+              <Stack>
+                <span>Rozmiary</span>
+                {isSizeSelected === false ? (
+                  <span className="text-danger">Wybierz rozmiar</span>
+                ) : null}
+              </Stack>
+              {isLowSizes ? (
+                <Stack direction="horizontal" className="ms-auto fs-7">
+                  <i className="bi bi-circle-fill text-danger me-1 fs-8"></i>{" "}
+                  <span>Zostało tylko kilka sztuk!</span>
+                </Stack>
+              ) : null}
+            </Stack>
+            <Stack direction="horizontal" className="flex-wrap" gap={3}>
+              <Sizes
+                sizes={product.sizes}
+                setIsLowSizes={() => setIsLowSizes(true)}
+                selectedSize={selectedSize}
+                handleSizeSelect={(e) => handleSizeSelect(e)}
+              />
+            </Stack>
+          </section>
+
+          <div
+            className={`${
+              isIntersectingSizes
+                ? "mt-4"
+                : "fixed-bottom px-4 py-3 bg-white border-1 border-top shadow"
+            }`}
+          >
+            <button
+              ref={addToCartRef}
+              className="bg-dark text-white py-3 w-100"
+              onClick={() => handleAddToCart()}
+            >
+              <i className="bi bi-bag me-2 text-white"></i>
+              <strong>Dodaj</strong>
+            </button>
+          </div>
         </article>
       ) : (
         <ImagePlaceholder />
