@@ -258,21 +258,33 @@ button:hover {
   }
 }
 
-dialog {
-  z-index: 12;
-}
-
-@media screen and (max-width: 972px) {
-  .sizes-dialog {
-    z-index: 15;
+@media screen and (max-width: 992px) {
+  .sizes-modal {
     position: fixed;
-    bottom: 0;
+    height: fit-content;
+    bottom: 0 !important;
+    margin: 0 !important;
+  }
+
+  .modal-open {
+    .navbar {
+      padding-right: calc(1.5rem + 17px) !important;
+    }
+    .navbar-brand {
+      margin-left: calc($spacer - 17px) !important;
+    }
   }
 }
 
-@media screen and (min-width: 972px) {
-  .sizes-dialog-container {
-    position: relative;
+@media screen and (min-width: 992px) {
+  .sizes-modal {
+    margin: auto !important;
+    top: 25% !important;
+  }
+  .modal-open {
+    .navbar {
+      padding-right: calc($spacer * 3 + 17px) !important;
+    }
   }
 }
 
