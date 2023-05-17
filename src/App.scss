@@ -164,8 +164,8 @@ a {
   max-width: 1000px;
 }
 
-.modal-header {
-  border: none;
+.modal-content {
+  border-radius: 0;
 }
 
 // End Bootstrap Overwriting
@@ -190,6 +190,106 @@ a {
   cursor: pointer;
 }
 
+<<<<<<< Updated upstream
+=======
+.disabled {
+  pointer-events: none;
+  background: rgb(228, 228, 228);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.ls-1 {
+  letter-spacing: 1px;
+}
+
+.ls-2 {
+  letter-spacing: 2px;
+}
+
+.fs-7 {
+  font-size: 0.8rem;
+}
+
+.fs-8 {
+  font-size: 0.5rem;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.flex-100 {
+  flex-basis: 100%;
+}
+
+.right-corner {
+  top: 20px;
+  right: 20px;
+}
+
+.badge-dimens {
+  width: 18px;
+  height: 18px;
+}
+
+.bage-positon {
+  top: 15px;
+  left: 10px;
+}
+
+.pointer-none {
+  pointer-events: none;
+}
+
+.selected {
+  background: $dark;
+  color: $white;
+}
+
+button:hover {
+  .dropdown-arrow {
+    color: white !important;
+    transition: color 0.15s ease-in-out;
+  }
+}
+
+.sizes:hover {
+  color: white;
+  box-shadow: $box-shadow-sm;
+  background-color: #003467;
+}
+
+@media screen and (max-width: 992px) {
+  .sizes-modal {
+    position: fixed;
+    height: fit-content;
+    bottom: 0 !important;
+    margin: 0 !important;
+  }
+
+  .modal-open {
+    .navbar {
+      padding-right: calc(1.5rem + 17px) !important;
+    }
+    .navbar-brand {
+      margin-left: calc($spacer - 17px) !important;
+    }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .sizes-modal {
+    margin: auto !important;
+    top: 25% !important;
+  }
+  .modal-open {
+    .navbar {
+      padding-right: calc($spacer * 3 + 17px) !important;
+    }
+  }
+}
+
+>>>>>>> Stashed changes
 .glow {
   animation: glow 1s alternate-reverse infinite;
   cursor: wait;

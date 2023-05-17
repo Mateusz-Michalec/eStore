@@ -17,7 +17,17 @@ export function DataProvider({ children }) {
   function toggleFavoriteProduct(product) {
     if (checkIsFavorite(product))
       setFavorites(favorites.filter((favorite) => favorite.id !== product.id));
-    else setFavorites((prev) => [...prev, product]);
+    else
+      setFavorites((prev) => [
+        ...prev,
+        {
+          id: product.id,
+          image: product.image,
+          title: product.title,
+          price: product.price,
+          sizes: product.sizes,
+        },
+      ]);
   }
 
   return (

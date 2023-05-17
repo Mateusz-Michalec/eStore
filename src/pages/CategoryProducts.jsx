@@ -139,6 +139,51 @@ export default function CategoryProducts() {
               {usdToPLN(product.price)} PLN
             </h2>
           </section>
+<<<<<<< Updated upstream:src/pages/CategoryProducts.jsx
+=======
+          <section className="mt-3" ref={sizesRef}>
+            <Stack direction="horizontal" className="mb-2">
+              <Stack>
+                <span>Rozmiary</span>
+                {isSizeSelected === false ? (
+                  <span className="text-danger">Wybierz rozmiar</span>
+                ) : null}
+              </Stack>
+              {isLowSizes ? (
+                <Stack direction="horizontal" className="ms-auto fs-7">
+                  <i className="bi bi-circle-fill text-danger me-1 fs-8"></i>{" "}
+                  <span>Zostało tylko kilka sztuk!</span>
+                </Stack>
+              ) : null}
+            </Stack>
+            <Stack direction="horizontal" className="flex-wrap" gap={3}>
+              <Sizes
+                type="Product"
+                sizes={product.sizes}
+                setIsLowSizes={() => setIsLowSizes(true)}
+                selectedSize={selectedSize}
+                handleSizeSelect={(e) => handleSizeSelect(e)}
+              />
+            </Stack>
+          </section>
+
+          <div
+            className={`${
+              isIntersectingSizes
+                ? "mt-4"
+                : "fixed-bottom px-4 py-3 bg-white border-1 border-top shadow"
+            }`}
+          >
+            <button
+              ref={addToCartRef}
+              className="bg-dark text-white py-3 w-100"
+              onClick={() => handleAddToCart()}
+            >
+              <i className="bi bi-bag me-2 text-white"></i>
+              <strong>Dodaj</strong>
+            </button>
+          </div>
+>>>>>>> Stashed changes:src/pages/Product.jsx
         </article>
       ) : (
         <ImagePlaceholder />
