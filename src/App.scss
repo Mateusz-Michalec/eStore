@@ -252,10 +252,10 @@ a {
   color: $white;
 }
 
-button:hover {
-  .dropdown-arrow {
-    color: white;
-  }
+.sizes:hover {
+  color: white;
+  box-shadow: $box-shadow-sm;
+  background-color: #003467;
 }
 
 @media screen and (max-width: 992px) {
