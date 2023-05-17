@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Container, Stack } from "react-bootstrap";
+import { Button, Modal, Stack } from "react-bootstrap";
 
 export default function Sizes({
   sizes,
@@ -9,15 +9,10 @@ export default function Sizes({
   type,
 }) {
   const [sizesElements, setSizeElements] = useState();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const dialogRef = useRef();
+  const [showModal, setShowModal] = useState(false);
 
-  function handleDialog() {
-    if (isDialogOpen) dialogRef.current.close();
-    else dialogRef.current.show();
-    setIsDialogOpen(!isDialogOpen);
-  }
-
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
   useEffect(() => {
     const elements = [];
 
@@ -57,12 +52,15 @@ export default function Sizes({
                 key={prop}
                 id={prop}
                 className={`${isZero ? "disabled" : ""} 
-                 py-3`}
-                onClick={(e) => handleSizeSelect(e)}
+                 `}
+                onClick={(e) => {
+                  handleSizeSelect(e);
+                  handleCloseModal();
+                }}
               >
                 <Stack
                   direction="horizontal"
-                  className="justify-content-between"
+                  className="justify-content-between sizes p-3"
                 >
                   <span>{prop}</span>
                   {isLow && isZero === false ? (
@@ -78,37 +76,57 @@ export default function Sizes({
       });
       setSizeElements(elements);
     } else return;
-  }, [selectedSize]);
+  }, []);
 
   if (type === "Product") return sizesElements;
   else if (type === "Favorites") {
+    let sizesBtnType;
+    switch (selectedSize) {
+      case "Wybierz rozmiar":
+        sizesBtnType = "outline-secondary";
+        break;
+      case "Wybierz rozmiar!":
+        sizesBtnType = "outline-danger";
+        break;
+      default:
+        sizesBtnType = "outline-dark";
+        break;
+    }
+
     return (
-      <div className="sizes-dialog-container">
+      <>
         <Button
-          variant="outline-secondary"
-          className="rounded-0 w-100 d-flex justify-content-between"
-          onClick={() => handleDialog()}
+          variant={sizesBtnType}
+          className="rounded-0 text-center p-2 px-3 w-50"
+          onClick={(e) => handleShowModal(e)}
         >
-          <span>Wybierz rozmiar </span>
-          <i className="bi bi-chevron-down dropdown-arrow"></i>
-        </Button>
-        {isDialogOpen ? (
-          <div className="overlay" onClick={() => handleDialog()}></div>
-        ) : null}
-        <dialog
-          ref={dialogRef}
-          className="sizes-dialog mt-5 border border-1 bg-white shadow-sm p-4 w-100"
-        >
-          <button
-            className="position-absolute bottom-100 mb-2 end-0 "
-            onClick={() => handleDialog()}
+          <span
+            className={`${
+              selectedSize !== "Wybierz rozmiar" &&
+              selectedSize !== "Wybierz rozmiar!"
+                ? "fw-bold"
+                : ""
+            }`}
           >
-            <i className="bi bi-x-circle-fill fs-4 text-white"></i>
-          </button>
-          <h6>Wybierz rozmiar</h6>
-          <Stack>{sizesElements}</Stack>
-        </dialog>
-      </div>
+            {selectedSize}
+          </span>
+        </Button>
+        <Modal
+          fullscreen={"lg-down"}
+          show={showModal}
+          onHide={handleCloseModal}
+          dialogClassName="sizes-modal"
+        >
+          <Modal.Header closeButton className="p-4">
+            <Modal.Title>
+              <h6 className=" m-0">Wybierz rozmiar</h6>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="p-3">
+            <Stack>{sizesElements}</Stack>
+          </Modal.Body>
+        </Modal>
+      </>
     );
   }
 }

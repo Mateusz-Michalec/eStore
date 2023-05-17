@@ -1,15 +1,20 @@
-import React, { useContext } from "react";
-import { Col, Form, Stack } from "react-bootstrap";
+import React, { useContext, useState } from "react";
+import { Button, Col, Form, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Sizes from "./Sizes";
 import DataContext from "../context/dataContext";
 
 export default function ProductPreview({ product, type }) {
-  const { toggleFavoriteProduct } = useContext(DataContext);
+  const { toggleFavoriteProduct, addToCart } = useContext(DataContext);
+  const [selectedSize, setSelectedSize] = useState("Wybierz rozmiar");
 
-  console.log(product);
+  function handleAddToCart() {
+    if (selectedSize !== "Wybierz rozmiar") addToCart(product);
+    else setSelectedSize("Wybierz rozmiar!");
+  }
+
   return (
-    <Col xs={6} md={4}>
+    <Col xs={12} sm={6} md={6} lg={4}>
       <article className="product-preview h-100">
         <section className="border shadow-sm p-4 pb-5 position-relative">
           <Link to={`/produkty/${product.id}`}>
@@ -19,19 +24,41 @@ export default function ProductPreview({ product, type }) {
               alt={product.title}
             />
           </Link>
-          <button
-            className="position-absolute bottom-right"
-            onClick={() => toggleFavoriteProduct(product)}
-          >
-            <i className="bi bi-trash fs-5"></i>
-          </button>
+          {type === "Favorites" ? (
+            <button
+              className="position-absolute bottom-right"
+              onClick={() => toggleFavoriteProduct(product)}
+            >
+              <i className="bi bi-trash fs-5"></i>
+            </button>
+          ) : null}
         </section>
         <section>
-          <div className="product-preview-title">
+          <div className="product-preview-title mt-1">
             <Link to={`/produkty/${product.id}`}>{product.title}</Link>
           </div>
-          <p className="fs-7 mb-3">{product.price} PLN</p>
-          <Sizes sizes={product.sizes} type={type} />
+          <p className="fs-7 mb-2">{product.price} PLN</p>
+          <Stack direction="horizontal" gap={3}>
+            <Sizes
+              type={type}
+              sizes={product.sizes}
+              selectedSize={selectedSize}
+              handleSizeSelect={(e) => setSelectedSize(e.currentTarget.id)}
+            />
+            <Button
+              variant={
+                selectedSize !== "Wybierz rozmiar" &&
+                selectedSize !== "Wybierz rozmiar!"
+                  ? "dark"
+                  : "secondary"
+              }
+              className="py-2 px-3 rounded-0 w-50"
+              onClick={() => handleAddToCart()}
+            >
+              <i className="bi bi-bag me-2 text-white"></i>
+              <strong>Dodaj</strong>
+            </Button>
+          </Stack>
         </section>
       </article>
     </Col>
