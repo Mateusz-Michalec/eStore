@@ -16,5 +16,5 @@ export default function useFetch(url, callback) {
     })();
   }, []);
 
-  return [data, error, setData];
+  return [data, error];
 }

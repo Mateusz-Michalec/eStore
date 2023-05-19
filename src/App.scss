@@ -41,6 +41,13 @@
 
 body {
   font-family: "Ubuntu", sans-serif;
+  letter-spacing: 1px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 button {
@@ -147,10 +154,6 @@ a {
   max-width: 1000px;
 }
 
-.modal-header {
-  border: none;
-}
-
 // End Bootstrap Overwriting
 
 .product-preview {
@@ -164,16 +167,11 @@ a {
   }
 }
 
-.bottom-right {
-  bottom: 10px;
-  right: 10px;
-}
-
 .max-800 {
   max-width: 800px;
 }
 
-.min-80 {
+.min-width-80px {
   min-width: 80px;
 }
 
@@ -194,13 +192,14 @@ a {
   object-fit: contain;
 }
 
-.pointer {
+.cursor-pointer {
   cursor: pointer;
 }
 
 .disabled {
   pointer-events: none;
-  background: rgb(228, 228, 228);
+  border-color: rgb(228, 228, 228) !important;
+  background: rgb(228, 228, 228) !important;
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -228,9 +227,14 @@ a {
   flex-basis: 100%;
 }
 
-.right-corner {
-  top: 20px;
-  right: 20px;
+.top-right {
+  top: 1rem;
+  right: 1.6rem;
+}
+
+.bottom-right {
+  bottom: 1rem;
+  right: 1.6rem;
 }
 
 .badge-dimens {
@@ -256,6 +260,12 @@ a {
   color: white;
   box-shadow: $box-shadow-sm;
   background-color: #003467;
+}
+
+.modal-open {
+  .fixed-btn {
+    padding-right: calc(1.5rem + 17px) !important;
+  }
 }
 
 @media screen and (max-width: 992px) {

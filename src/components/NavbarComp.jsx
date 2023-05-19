@@ -67,7 +67,7 @@ export default function NavbarComp() {
         sticky="top"
         className={`${
           !categories ? "glow" : ""
-        } shadow px-4 px-lg-5 py-2 flex-wrap`}
+        } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
         {categories ? (
           <Navbar.Toggle
@@ -101,10 +101,12 @@ export default function NavbarComp() {
                   ) : null}
                 </button>
               </Link>
-              <button className="position-relative">
-                <i className="bi bi-bag fs-5 nav-icon"></i>
-                {cart.length >= 1 ? <Badge value={cart.length} /> : null}
-              </button>
+              <Link to="/koszyk">
+                <button className="position-relative">
+                  <i className="bi bi-bag fs-5 nav-icon"></i>
+                  {cart.length >= 1 ? <Badge value={cart.length} /> : null}
+                </button>
+              </Link>
             </Stack>
           </Navbar.Text>
         ) : null}

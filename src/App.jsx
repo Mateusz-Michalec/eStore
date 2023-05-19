@@ -6,8 +6,9 @@ import ScrollToTop from "./components/ScrollToTop";
 import { Suspense, lazy } from "react";
 
 const Home = lazy(() => import("./pages/Home"));
-const CategoryProducts = lazy(() => import("./pages/Product"));
+const Product = lazy(() => import("./pages/Product"));
 const Favorites = lazy(() => import("./pages/Favorites"));
+const Cart = lazy(() => import("./pages/Cart"));
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
             path={`/produkty/:id`}
             element={
               <Suspense>
-                <CategoryProducts />
+                <Product />
               </Suspense>
             }
           />
@@ -36,6 +37,14 @@ function App() {
             element={
               <Suspense>
                 <Favorites />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/koszyk"
+            element={
+              <Suspense>
+                <Cart />
               </Suspense>
             }
           />
