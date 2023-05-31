@@ -10,13 +10,11 @@ import {
   Stack,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ImagePlaceholder from "../components/ImagePlaceholder";
 import DataContext from "../context/dataContext";
 import useInView from "../hooks/useInView";
 import Sizes from "../components/Sizes";
 import StarsRating from "../components/StarsRating";
 import ProductPhoto from "../components/ProductPhoto";
-import useFetch from "../hooks/useFetch";
 
 export default function Product() {
   // Data Context
@@ -26,8 +24,6 @@ export default function Product() {
   // Get Product
   const { id } = useParams();
   const [product] = getSingleProduct(id);
-
-  console.log(product);
   // Get Product End
 
   // AddToCart Btn intersecting
@@ -60,10 +56,10 @@ export default function Product() {
   // Sizes End
 
   return (
-    <main className="p-4 min-vh-100">
+    <main className="my-5 px-3">
       {product ? (
         <article className="d-flex flex-column mb-4">
-          <Breadcrumb className="fs-7 d-flex justify-content-center mb-2">
+          <Breadcrumb className="fs-7 d-flex justify-content-center mb-4">
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>
               Home
             </Breadcrumb.Item>
@@ -85,41 +81,43 @@ export default function Product() {
                   <h1 className="h4 mb-1">{product.title}</h1>
                   <h2 className="h5 mb-0 text-danger">{product.price} PLN</h2>
                 </section>
-                {/* <StarsRating
+                <StarsRating
                   ratingRate={product.rating.rate}
                   ratingCount={product.rating.count}
-                /> */}
-                <section ref={sizesRef}>
-                  <Stack direction="horizontal" className="mb-2">
-                    <Stack>
-                      <span>Rozmiary</span>
-                      {isSizeSelected === false ? (
-                        <span className="text-danger">Wybierz rozmiar</span>
+                />
+                {product.sizes ? (
+                  <section ref={sizesRef}>
+                    <Stack direction="horizontal" className="mb-2">
+                      <Stack>
+                        <span>Rozmiary</span>
+                        {isSizeSelected === false ? (
+                          <span className="text-danger">Wybierz rozmiar</span>
+                        ) : null}
+                      </Stack>
+                      {isLowSizes ? (
+                        <Stack direction="horizontal" className="ms-auto fs-7">
+                          <i className="bi bi-circle-fill text-danger me-1 fs-8"></i>{" "}
+                          <span>Zostało tylko kilka sztuk!</span>
+                        </Stack>
                       ) : null}
                     </Stack>
-                    {isLowSizes ? (
-                      <Stack direction="horizontal" className="ms-auto fs-7">
-                        <i className="bi bi-circle-fill text-danger me-1 fs-8"></i>{" "}
-                        <span>Zostało tylko kilka sztuk!</span>
-                      </Stack>
-                    ) : null}
-                  </Stack>
-                  <Stack direction="horizontal" className="flex-wrap" gap={3}>
-                    <Sizes
-                      component="Product"
-                      sizes={product.sizes}
-                      setIsLowSizes={() => setIsLowSizes(true)}
-                      selectedSize={selectedSize}
-                      handleSizeSelect={(e) => handleSizeSelect(e)}
-                    />
-                  </Stack>
-                </section>
+                    <Stack direction="horizontal" className="flex-wrap" gap={3}>
+                      <Sizes
+                        component="Product"
+                        sizes={product.sizes}
+                        setIsLowSizes={() => setIsLowSizes(true)}
+                        selectedSize={selectedSize}
+                        handleSizeSelect={(e) => handleSizeSelect(e)}
+                      />
+                    </Stack>
+                  </section>
+                ) : null}
 
                 <div
                   className={`${
                     isIntersectingSizes
                       ? "mt-3"
-                      : "fixed-bottom fixed-btn px-4 py-3 bg-white border-1 border-top shadow"
+                      : "fixed-bottom fixed-btn d-lg-none px-4 py-3 bg-white border-1 border-top shadow"
                   }`}
                 >
                   <Button
@@ -141,7 +139,7 @@ export default function Product() {
           </Container>
         </article>
       ) : (
-        <ImagePlaceholder />
+        <div className="loader mx-auto"></div>
       )}
     </main>
   );

@@ -13,7 +13,7 @@ export default function ProductPhoto({ product, component }) {
   const handleShowModalImg = () => setShowModalImg(true);
   // Modal Img End
 
-  const isFavorite = checkIsAlreadyAdded(product, favorites);
+  const isFavorite = checkIsAlreadyAdded(product, favorites, true);
 
   return (
     <>
@@ -31,8 +31,12 @@ export default function ProductPhoto({ product, component }) {
         </Modal>
       ) : null}
       <section
-        className={`border px-3 shadow-sm position-relative ${
-          component === "Product" ? "d-flex align-items-center h-100" : ""
+        className={`${
+          component !== "Cart" ? "border px-3 shadow-sm position-relative" : ""
+        } ${
+          component === "Product" || component === "Cart"
+            ? "d-flex align-items-center justify-content-center h-100"
+            : ""
         }`}
       >
         <ConditionalLink
@@ -40,35 +44,34 @@ export default function ProductPhoto({ product, component }) {
           condition={component !== "Product"}
           children={
             <img
-              className={`w-100 my-5 
+              className={`w-100 ${
+                component === "Cart" ? "my-0 product-cart-img" : "my-5 "
+              }
             ${
-              component !== "Product" ? "product-preview-img" : ""
+              component !== "Product" ? "product-preview-img" : "px-4"
             }  img-contain cursor-pointer`}
               src={product.image}
               alt={product.title}
-              // style={{ height: "auto" }}
               onClick={component === "Product" ? handleShowModalImg : null}
             />
           }
         />
-        <button
-          className={`position-absolute ${
-            component === "Product" || component === "Cart"
-              ? "top-right"
-              : "bottom-right"
-          }`}
-          onClick={() => toggleFavoriteProduct(product)}
-        >
-          <i
-            className={`bi ${
-              component === "Favorites"
-                ? "bi-trash"
-                : isFavorite
-                ? "text-danger bi-heart-fill"
-                : "bi-heart"
-            } fs-5`}
-          ></i>
-        </button>
+        {component !== "Cart" ? (
+          <button
+            className="position-absolute top-right"
+            onClick={() => toggleFavoriteProduct(product)}
+          >
+            <i
+              className={`bi ${
+                component === "Favorites"
+                  ? "bi-trash"
+                  : isFavorite
+                  ? "text-danger bi-heart-fill"
+                  : "bi-heart"
+              } fs-5`}
+            ></i>
+          </button>
+        ) : null}
       </section>
     </>
   );

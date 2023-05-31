@@ -1,17 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { Button, Form, Col, Container, Row, Stack } from "react-bootstrap";
+import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ProductPreview from "./ProductPreview";
 import DataContext from "../context/dataContext";
 import ProductPhoto from "./ProductPhoto";
 
 export default function CartProduct({ product }) {
+  function getAvailableSizesQuantity() {
+    const sizeObj = product.sizes.find((item) => item[product.size]);
+    return Object.values(sizeObj)[0];
+  }
+
   function renderQuantityOptions() {
+    const available = product.sizes
+      ? getAvailableSizesQuantity()
+      : product.available;
     const elements = [];
     for (let i = 1; i < 21; i++) {
       elements.push(
-        <option key={i} value={i}>
+        <option disabled={i > available} key={i} value={i}>
           {i}
         </option>
       );
@@ -19,40 +26,39 @@ export default function CartProduct({ product }) {
     return elements;
   }
 
-  const { addToCart, deleteFromCart } = useContext(DataContext);
+  const { updateCart, deleteFromCart } = useContext(DataContext);
   const [quantityOptions, setQuantityOptions] = useState(renderQuantityOptions);
   const [quantity, setQuantity] = useState(product.quantity);
 
-  useEffect(() => {
-    addToCart(product, product.size, quantity);
-  }, [quantity]);
+  function handleQuantityChange(e) {
+    setQuantity(e.target.value);
+    updateCart(product.id, product.size, Number(e.target.value));
+  }
 
   return (
-    <Col lg={6} xxl={4}>
-      <article>
+    <Col xs={12} lg={6}>
+      <article className="shadow-sm border p-3">
         <Row>
-          <Col xs={5}>
+          <Col xs={3}>
             <ProductPhoto product={product} component={"Cart"} />
           </Col>
-          <Col xs={7}>
-            <section className="border shadow-sm p-3 h-100 position-relative">
-              <Stack gap={3}>
-                <div className="product-preview-title mt-1">
+
+          <Col xs={9}>
+            <section className="position-relative">
+              <Stack gap={2}>
+                <div className={`product-preview-title`}>
                   <Link to={`/produkty/${product.id}`}>{product.title}</Link>
                 </div>
 
-                <span>
-                  Rozmiar: <strong className="text-main">{product.size}</strong>
-                </span>
+                {product.size ? (
+                  <span>
+                    Rozmiar:{" "}
+                    <strong className="text-main">{product.size}</strong>
+                  </span>
+                ) : (
+                  <br />
+                )}
 
-                <Form.Select
-                  onChange={(e) => setQuantity(e.target.value)}
-                  value={quantity}
-                  aria-label="Wybór ilości"
-                  className=" rounded-0 my-2"
-                >
-                  {quantityOptions}
-                </Form.Select>
                 <span>
                   Suma:{" "}
                   <strong className="text-main">
@@ -60,12 +66,22 @@ export default function CartProduct({ product }) {
                   </strong>
                 </span>
 
-                <button
-                  className="position-absolute bottom-right"
-                  onClick={() => deleteFromCart(product, product?.size)}
-                >
-                  <i className="bi bi-trash fs-4"></i>
-                </button>
+                <Stack direction="horizontal" className="my-2">
+                  <Form.Select
+                    onChange={(e) => handleQuantityChange(e)}
+                    value={quantity}
+                    aria-label="Wybór ilości"
+                    className="rounded-0 me-3"
+                  >
+                    {quantityOptions}
+                  </Form.Select>
+                  <button
+                    className=""
+                    onClick={() => deleteFromCart(product, product?.size)}
+                  >
+                    <i className="bi bi-trash fs-4"></i>
+                  </button>
+                </Stack>
               </Stack>
             </section>
           </Col>

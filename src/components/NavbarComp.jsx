@@ -9,6 +9,7 @@ import { Link, Outlet } from "react-router-dom";
 
 import { Container, Stack, Form, Nav, Navbar } from "react-bootstrap";
 import Badge from "./Badge";
+import TimeoutAlert from "./TimeoutAlert";
 
 export default function NavbarComp() {
   const [isSearch, setIsSearch] = useState(false);
@@ -69,6 +70,7 @@ export default function NavbarComp() {
           !categories ? "glow" : ""
         } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
+        <TimeoutAlert />
         {categories ? (
           <Navbar.Toggle
             ref={hamburger}

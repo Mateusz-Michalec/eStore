@@ -2,6 +2,8 @@ import { createContext, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { getProductSizes, usdToPLN } from "../utils";
+import usePromiseAll from "../hooks/usePromiseAll";
+import useTimeoutAlert from "../hooks/useTimeoutAlert";
 
 const DataContext = createContext();
 
@@ -13,57 +15,102 @@ export function DataProvider({ children }) {
 
   const [sizes, setSizes] = useState(getProductSizes);
 
-  console.log(sizes);
+  const [alertData, setAlertData] = useTimeoutAlert();
 
-  function checkIsAlreadyAdded(product, array, favoriteCheck) {
-    if (favoriteCheck) return array.find((item) => item.id === product.id);
-    else
-      return array.find(
-        (item) => item.id === product.id && item.size === product.size
-      );
+  function checkIsAlreadyAdded(id, array, selectedSize) {
+    if (typeof array === "object")
+      return array.find((item) => item.id === id && item.size === selectedSize);
+    else return array.includes(product.id);
+  }
+
+  function getPromises(array) {
+    const promises = [];
+    const addedIds = [];
+    array.map((item) => {
+      if (typeof item === "object") {
+        if (addedIds.some((id) => id === item.id) === false) {
+          promises.push(fetch(`https://fakestoreapi.com/products/${item.id}`));
+          addedIds.push(item.id);
+        }
+      } else {
+        if (addedIds.some((id) => id === item) === false) {
+          promises.push(fetch(`https://fakestoreapi.com/products/${item}`));
+          addedIds.push(item);
+        }
+      }
+    });
+    return promises;
+  }
+
+  function changeProductData(product) {
+    return {
+      ...product,
+      price: usdToPLN(product.price),
+      sizes:
+        product.category === "men's clothing" ||
+        product.category === "women's clothing"
+          ? sizes[product.id]
+          : null,
+      available:
+        product.category !== "men's clothing" &&
+        product.category !== "women's clothing"
+          ? Math.floor(Math.random() * 20)
+          : null,
+    };
+  }
+
+  function changeProductsData(products) {
+    return products.map((product) => changeProductData(product));
   }
 
   function getSingleProduct(id) {
     return useFetch(
       `https://fakestoreapi.com/products/${id}`,
-      function changeData(product) {
-        return { ...product, price: usdToPLN(product.price), sizes: sizes[id] };
-      }
+      changeProductData
     );
   }
 
-  function toggleFavoriteProduct(product) {
-    if (checkIsAlreadyAdded(product, favorites, true))
-      setFavorites(favorites.filter((favorite) => favorite.id !== product.id));
-    else setFavorites((prev) => [...prev, { id: product.id }]);
+  function getMultipleProducts(array) {
+    return usePromiseAll(getPromises(array), changeProductsData);
   }
 
-  function addToCart(product, size, quantity) {
-    const current = checkIsAlreadyAdded(product, cart);
-    if (!current)
-      setCart((prev) => [
-        ...prev,
-        (({ id, image, title, price }) => ({
-          id,
-          image,
-          title,
-          price,
-          size: size,
-          quantity: 1,
-        }))(product),
-      ]);
-    else {
+  function toggleFavoriteProduct(product) {
+    if (checkIsAlreadyAdded(product, favorites))
+      setFavorites(favorites.filter((favoriteId) => favoriteId !== product.id));
+    else setFavorites((prev) => [...prev, product.id]);
+  }
+
+  function addToCart(id, size, price, quantity = 1) {
+    const current = checkIsAlreadyAdded(id, cart, size);
+    if (current)
       setCart((prev) =>
         prev.map((item) => {
           if (item.id === current.id && item.size === current.size)
             return {
               ...current,
-              quantity: quantity || item.quantity + 1,
+              quantity: quantity > 1 ? quantity : item.quantity + 1,
             };
           else return { ...item };
         })
       );
-    }
+    else
+      setCart((prev) => [
+        ...prev,
+        { id: id, size: size, quantity: quantity, price: price },
+      ]);
+  }
+
+  function updateCart(id, size, quantity) {
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.id === id && item.size === size)
+          return {
+            ...item,
+            quantity: quantity,
+          };
+        else return { ...item };
+      })
+    );
   }
 
   function deleteFromCart(product, isSize) {
@@ -81,7 +128,11 @@ export function DataProvider({ children }) {
         checkIsAlreadyAdded,
         addToCart,
         deleteFromCart,
+        updateCart,
         getSingleProduct,
+        getMultipleProducts,
+        alertData,
+        setAlertData,
       }}
     >
       {children}

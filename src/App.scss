@@ -156,6 +156,20 @@ a {
 
 // End Bootstrap Overwriting
 
+.placeholder-img {
+  height: 16rem;
+}
+
+.bi {
+  transition: $btn-transition;
+}
+
+.btn:hover {
+  .back-icon {
+    color: white;
+  }
+}
+
 .product-preview {
   &-img {
     height: 10rem;
@@ -229,12 +243,12 @@ a {
 
 .top-right {
   top: 1rem;
-  right: 1.6rem;
+  right: 1.3rem;
 }
 
 .bottom-right {
   bottom: 1rem;
-  right: 1.6rem;
+  right: 1.3rem;
 }
 
 .badge-dimens {
@@ -251,9 +265,40 @@ a {
   pointer-events: none;
 }
 
+.product-cart-img {
+  min-height: 6rem;
+  max-height: 6rem;
+}
+
+.product-cart-placeholder {
+  height: 11.6rem;
+}
+
 .selected {
   background: $dark;
   color: $white;
+}
+
+.no-effect:hover {
+  color: unset;
+}
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #003467;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .sizes:hover {
