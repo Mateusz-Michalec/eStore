@@ -8,11 +8,13 @@ import DataContext from "../context/dataContext";
 import { Link, Outlet } from "react-router-dom";
 
 import { Container, Stack, Form, Nav, Navbar } from "react-bootstrap";
+import Badge from "./Badge";
+import TimeoutAlert from "./TimeoutAlert";
 
 export default function NavbarComp() {
   const [isSearch, setIsSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { categories } = useContext(DataContext);
+  const { categories, cart, favorites } = useContext(DataContext);
 
   const hamburger = useRef();
 
@@ -66,8 +68,9 @@ export default function NavbarComp() {
         sticky="top"
         className={`${
           !categories ? "glow" : ""
-        } shadow px-4 px-lg-5 py-2 flex-wrap`}
+        } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
+        <TimeoutAlert />
         {categories ? (
           <Navbar.Toggle
             ref={hamburger}
@@ -75,7 +78,7 @@ export default function NavbarComp() {
             className="p-0"
             onClick={() => toggleHamburger()}
           >
-            <i className={`bi ${isMenuOpen ? "bi-x-lg" : "bi-list"} fs-1`}></i>
+            <i className={`bi ${isMenuOpen ? "bi-x-lg" : "bi-list"} fs-2`}></i>
           </Navbar.Toggle>
         ) : null}
         <Navbar.Brand className="me-auto ms-3 ms-lg-0">
@@ -85,19 +88,27 @@ export default function NavbarComp() {
         </Navbar.Brand>
         {categories ? (
           <Navbar.Text className="order-lg-1">
-            <Stack direction="horizontal" className="gap-4 gap-lg-5">
+            <Stack direction="horizontal" className="gap-4 gap-lg-5 ">
               <button>
-                <i className="bi bi-person fs-3 nav-icon"></i>
+                <i className="bi bi-person fs-4 nav-icon"></i>
               </button>
               <button onClick={() => toggleSearch()}>
                 <i className="bi bi-search fs-5 nav-icon"></i>
               </button>
-              <button>
-                <i className="bi bi-heart fs-5 nav-icon"></i>
-              </button>
-              <button>
-                <i className="bi bi-bag fs-5 nav-icon"></i>
-              </button>
+              <Link to="/ulubione">
+                <button className="position-relative">
+                  <i className="bi bi-heart fs-5 nav-icon"></i>
+                  {favorites.length >= 1 ? (
+                    <Badge value={favorites.length} />
+                  ) : null}
+                </button>
+              </Link>
+              <Link to="/koszyk">
+                <button className="position-relative">
+                  <i className="bi bi-bag fs-5 nav-icon"></i>
+                  {cart.length >= 1 ? <Badge value={cart.length} /> : null}
+                </button>
+              </Link>
             </Stack>
           </Navbar.Text>
         ) : null}

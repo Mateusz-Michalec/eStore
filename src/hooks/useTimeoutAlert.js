@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-export default function useTimeoutAlert(duration) {
-  const [show, setShow] = useState(false);
+export default function useTimeoutAlert() {
+  const [alertData, setAlertData] = useState({
+    show: false,
+    text: "",
+    location: "",
+  });
 
   useEffect(() => {
-    const action = setTimeout(() => {
-      setShow(false);
-    }, duration);
+    let action;
+    if (alertData.show)
+      action = setTimeout(() => {
+        setAlertData((prev) => ({ ...prev, show: false }));
+      }, 2500);
 
     return () => {
       clearTimeout(action);
     };
-  }, [show]);
+  }, [alertData.show]);
 
-  return [show, setShow];
+  return [alertData, setAlertData];
 }

@@ -6,6 +6,10 @@
   color: #003467;
 }
 
+.main-bg {
+  background: #003467;
+}
+
 .section-1-bg {
   background: #f7ebde;
 }
@@ -27,8 +31,23 @@
   box-sizing: border-box;
 }
 
+.overlay {
+  z-index: 10;
+  background: $black;
+  opacity: 0.5;
+  position: fixed;
+  inset: 0;
+}
+
 body {
   font-family: "Ubuntu", sans-serif;
+  letter-spacing: 1px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 button {
@@ -64,35 +83,6 @@ img {
   }
 }
 
-.ls-1 {
-  letter-spacing: 1px;
-}
-
-.ls-2 {
-  letter-spacing: 2px;
-}
-
-.fs-7 {
-  font-size: 0.7rem;
-}
-
-.flex-grow-1 {
-  flex-grow: 1;
-}
-
-.flex-100 {
-  flex-basis: 100%;
-}
-
-.right-corner {
-  top: 20px;
-  right: 20px;
-}
-
-.pointer-none {
-  pointer-events: none;
-}
-
 // Home
 
 .hero-body {
@@ -116,7 +106,7 @@ img {
 
 .nav-link,
 .link,
-.nav-icon,
+i,
 a {
   &:hover,
   &:active,
@@ -164,18 +154,51 @@ a {
   max-width: 1000px;
 }
 
-.modal-content {
-  border-radius: 0;
+// End Bootstrap Overwriting
+
+.placeholder-img {
+  height: 16rem;
 }
 
-// End Bootstrap Overwriting
+.bi {
+  transition: $btn-transition;
+}
+
+.btn:hover {
+  .back-icon {
+    color: white;
+  }
+}
+
+.product-preview {
+  &-img {
+    height: 10rem;
+  }
+  &-placeholder {
+    height: 16rem;
+  }
+  &-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
 
 .max-800 {
   max-width: 800px;
 }
 
+.min-width-80px {
+  min-width: 80px;
+}
+
 .max-vh-35 {
   max-height: 35vh;
+}
+
+.vh-30 {
+  min-height: 30vh;
+  max-height: 30vh;
 }
 
 .img-cover {
@@ -186,15 +209,14 @@ a {
   object-fit: contain;
 }
 
-.pointer {
+.cursor-pointer {
   cursor: pointer;
 }
 
-<<<<<<< Updated upstream
-=======
 .disabled {
   pointer-events: none;
-  background: rgb(228, 228, 228);
+  border-color: rgb(228, 228, 228) !important;
+  background: rgb(228, 228, 228) !important;
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -222,9 +244,14 @@ a {
   flex-basis: 100%;
 }
 
-.right-corner {
-  top: 20px;
-  right: 20px;
+.top-right {
+  top: 1rem;
+  right: 1.3rem;
+}
+
+.bottom-right {
+  bottom: 1rem;
+  right: 1.3rem;
 }
 
 .badge-dimens {
@@ -241,15 +268,40 @@ a {
   pointer-events: none;
 }
 
+.product-cart-img {
+  min-height: 6rem;
+  max-height: 6rem;
+}
+
+.product-cart-placeholder {
+  height: 11.6rem;
+}
+
 .selected {
   background: $dark;
   color: $white;
 }
 
-button:hover {
-  .dropdown-arrow {
-    color: white !important;
-    transition: color 0.15s ease-in-out;
+.no-effect:hover {
+  color: unset;
+}
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #003467;
+  border-radius: 50%;
+  margin: 0 auto;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -257,6 +309,12 @@ button:hover {
   color: white;
   box-shadow: $box-shadow-sm;
   background-color: #003467;
+}
+
+.modal-open {
+  .fixed-btn {
+    padding-right: calc(1.5rem + 17px) !important;
+  }
 }
 
 @media screen and (max-width: 992px) {
@@ -289,7 +347,6 @@ button:hover {
   }
 }
 
->>>>>>> Stashed changes
 .glow {
   animation: glow 1s alternate-reverse infinite;
   cursor: wait;

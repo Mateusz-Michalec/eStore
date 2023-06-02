@@ -14,19 +14,18 @@ import {
   Collapse,
   Container,
 } from "react-bootstrap";
-import ImagePlaceholder from "../components/ImagePlaceholder";
 
 export default function Home() {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const { categories, products } = useContext(DataContext);
+  const { categories, allProducts } = useContext(DataContext);
 
   const [carouselProducts] = useFetch(
     "https://fakestoreapi.com/products?limit=5"
   );
 
   let mostPopularProduct;
-  if (products)
-    mostPopularProduct = products.reduce((prev, current) =>
+  if (allProducts)
+    mostPopularProduct = allProducts.reduce((prev, current) =>
       prev.rating.count > current.rating.count ? prev : current
     );
 
@@ -114,7 +113,7 @@ export default function Home() {
               ))}
             </Carousel>
           ) : (
-            <ImagePlaceholder />
+            <div className="loader"></div>
           )}
         </Container>
       </section>
@@ -147,7 +146,7 @@ export default function Home() {
             </Container>
           </Link>
         ) : (
-          <ImagePlaceholder />
+          <div className="loader"></div>
         )}
       </section>
     </main>

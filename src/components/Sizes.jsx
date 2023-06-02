@@ -6,9 +6,11 @@ export default function Sizes({
   setIsLowSizes,
   handleSizeSelect,
   selectedSize,
-  type,
+  component,
 }) {
-  const [sizesElements, setSizeElements] = useState();
+  function renderSizes() {}
+
+  const [sizesElements, setSizeElements] = useState(renderSizes);
   const [showModal, setShowModal] = useState(false);
 
   const handleCloseModal = () => setShowModal(false);
@@ -23,14 +25,15 @@ export default function Sizes({
           const isLow = quantity <= 3 && quantity > 0;
           if (isLow && setIsLowSizes) setIsLowSizes();
           const isZero = quantity === 0;
-          if (type === "Product") {
+          if (component === "Product") {
             elements.push(
-              <button
+              <Button
+                variant="outline-dark"
                 key={prop}
                 id={prop}
                 className={`${isZero ? "disabled" : ""} ${
                   prop === selectedSize ? "selected" : ""
-                } py-2 border min-80`}
+                } py-2 min-width-80px rounded-0`}
                 onClick={(e) => handleSizeSelect(e)}
               >
                 <Stack
@@ -44,9 +47,9 @@ export default function Sizes({
                     <span>{prop}</span>
                   </Stack>
                 </Stack>
-              </button>
+              </Button>
             );
-          } else if (type === "Favorites") {
+          } else if (component === "Favorites") {
             elements.push(
               <button
                 key={prop}
@@ -76,28 +79,28 @@ export default function Sizes({
       });
       setSizeElements(elements);
     } else return;
-  }, []);
+  }, [selectedSize]);
 
-  if (type === "Product") return sizesElements;
-  else if (type === "Favorites") {
-    let sizesBtnType;
+  if (component === "Product") return sizesElements;
+  else if (component === "Favorites") {
+    let sizesBtncomponent;
     switch (selectedSize) {
       case "Wybierz rozmiar":
-        sizesBtnType = "outline-secondary";
+        sizesBtncomponent = "outline-secondary";
         break;
       case "Wybierz rozmiar!":
-        sizesBtnType = "outline-danger";
+        sizesBtncomponent = "outline-danger";
         break;
       default:
-        sizesBtnType = "outline-dark";
+        sizesBtncomponent = "outline-dark";
         break;
     }
 
     return (
       <>
         <Button
-          variant={sizesBtnType}
-          className="rounded-0 text-center p-2 px-3 w-50"
+          variant={sizesBtncomponent}
+          className="rounded-0 text-center p-2 w-50"
           onClick={(e) => handleShowModal(e)}
         >
           <span
