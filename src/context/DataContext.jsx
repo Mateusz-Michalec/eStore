@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { getProductSizes, usdToPLN } from "../utils";
+import { getProductSizes, usdToPLN, getPromises } from "../utils";
 import usePromiseAll from "../hooks/usePromiseAll";
 import useTimeoutAlert from "../hooks/useTimeoutAlert";
 
@@ -10,36 +10,36 @@ const DataContext = createContext();
 export function DataProvider({ children }) {
   const [categories] = useFetch("https://fakestoreapi.com/products/categories");
 
+  const [allProducts, setAllProducts] = useFetch(
+    "https://fakestoreapi.com/products"
+  );
+
   const [favorites, setFavorites] = useLocalStorage("favorites", []);
   const [cart, setCart] = useLocalStorage("cart", []);
+  const [historyProducts, setHistoryProducts] = useLocalStorage(
+    "productsHistory",
+    []
+  );
 
   const [sizes, setSizes] = useState(getProductSizes);
 
   const [alertData, setAlertData] = useTimeoutAlert();
 
-  function checkIsAlreadyAdded(id, array, selectedSize) {
-    if (typeof array === "object")
-      return array.find((item) => item.id === id && item.size === selectedSize);
-    else return array.includes(product.id);
+  function addProductToHistory(product) {
+    useEffect(() => {
+      if (product)
+        if (historyProducts.includes(product.id) === false) {
+          if (historyProducts.length > 15)
+            setHistoryProducts((prev) => prev.toSpliced(0, 1, product.id));
+          else setHistoryProducts((prev) => [product.id, ...prev]);
+        }
+    }, [product]);
   }
 
-  function getPromises(array) {
-    const promises = [];
-    const addedIds = [];
-    array.map((item) => {
-      if (typeof item === "object") {
-        if (addedIds.some((id) => id === item.id) === false) {
-          promises.push(fetch(`https://fakestoreapi.com/products/${item.id}`));
-          addedIds.push(item.id);
-        }
-      } else {
-        if (addedIds.some((id) => id === item) === false) {
-          promises.push(fetch(`https://fakestoreapi.com/products/${item}`));
-          addedIds.push(item);
-        }
-      }
-    });
-    return promises;
+  function checkIsAlreadyAdded(id, array, selectedSize) {
+    if (Array.isArray(array)) return array.includes(id);
+    else
+      return array.find((item) => item.id === id && item.size === selectedSize);
   }
 
   function changeProductData(product) {
@@ -66,7 +66,8 @@ export function DataProvider({ children }) {
   function getSingleProduct(id) {
     return useFetch(
       `https://fakestoreapi.com/products/${id}`,
-      changeProductData
+      changeProductData,
+      id
     );
   }
 
@@ -74,13 +75,22 @@ export function DataProvider({ children }) {
     return usePromiseAll(getPromises(array), changeProductsData);
   }
 
-  function toggleFavoriteProduct(product) {
-    if (checkIsAlreadyAdded(product, favorites))
-      setFavorites(favorites.filter((favoriteId) => favoriteId !== product.id));
-    else setFavorites((prev) => [...prev, product.id]);
+  function toggleFavoriteProduct(id) {
+    const isFavorite = checkIsAlreadyAdded(id, favorites);
+    if (isFavorite)
+      setFavorites(favorites.filter((favoriteId) => favoriteId !== id));
+    else setFavorites((prev) => [...prev, id]);
+
+    setAlertData({
+      show: true,
+      text: isFavorite
+        ? "Usunięto produkt z ulubionych."
+        : "Dodano produkt do ulubionych!",
+      location: "ulubione",
+    });
   }
 
-  function addToCart(id, size, price, quantity = 1) {
+  function addToCart(id, size, price) {
     const current = checkIsAlreadyAdded(id, cart, size);
     if (current)
       setCart((prev) =>
@@ -88,7 +98,7 @@ export function DataProvider({ children }) {
           if (item.id === current.id && item.size === current.size)
             return {
               ...current,
-              quantity: quantity > 1 ? quantity : item.quantity + 1,
+              quantity: item.quantity + 1,
             };
           else return { ...item };
         })
@@ -96,8 +106,13 @@ export function DataProvider({ children }) {
     else
       setCart((prev) => [
         ...prev,
-        { id: id, size: size, quantity: quantity, price: price },
+        { id: id, size: size, quantity: 1, price: price },
       ]);
+    setAlertData({
+      show: true,
+      text: "Dodano produkt do koszyka!",
+      location: "koszyk",
+    });
   }
 
   function updateCart(id, size, quantity) {
@@ -114,18 +129,29 @@ export function DataProvider({ children }) {
   }
 
   function deleteFromCart(product, isSize) {
-    if (isSize) setCart(cart.filter((item) => item.size !== product.size));
+    if (isSize)
+      setCart(
+        cart.filter(
+          (item) => item.size !== product.size || item.id !== product.id
+        )
+      );
     else setCart(cart.filter((item) => item.id !== product.id));
+    setAlertData({
+      show: true,
+      text: "Usunięto produkt z koszyka.",
+      location: "koszyk",
+    });
   }
 
   return (
     <DataContext.Provider
       value={{
         categories,
+        allProducts,
         favorites,
-        cart,
         toggleFavoriteProduct,
         checkIsAlreadyAdded,
+        cart,
         addToCart,
         deleteFromCart,
         updateCart,
@@ -133,6 +159,8 @@ export function DataProvider({ children }) {
         getMultipleProducts,
         alertData,
         setAlertData,
+        historyProducts,
+        addProductToHistory,
       }}
     >
       {children}

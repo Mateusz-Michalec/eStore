@@ -4,6 +4,7 @@ import Navbar from "./components/NavbarComp";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { Suspense, lazy } from "react";
+import TimeoutFallback from "./components/TimeoutFallback";
 
 const Home = lazy(() => import("./pages/Home"));
 const Product = lazy(() => import("./pages/Product"));
@@ -19,7 +20,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Suspense>
+              <Suspense fallback={<TimeoutFallback />}>
                 <Home />
               </Suspense>
             }
@@ -27,7 +28,7 @@ function App() {
           <Route
             path={`/produkty/:id`}
             element={
-              <Suspense>
+              <Suspense fallback={<TimeoutFallback />}>
                 <Product />
               </Suspense>
             }
@@ -35,7 +36,7 @@ function App() {
           <Route
             path="/ulubione"
             element={
-              <Suspense>
+              <Suspense fallback={<TimeoutFallback />}>
                 <Favorites />
               </Suspense>
             }
@@ -43,7 +44,7 @@ function App() {
           <Route
             path="/koszyk"
             element={
-              <Suspense>
+              <Suspense fallback={<TimeoutFallback />}>
                 <Cart />
               </Suspense>
             }

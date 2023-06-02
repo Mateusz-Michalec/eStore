@@ -5,7 +5,7 @@ import DataContext from "../context/dataContext";
 import ProductPreview from "./ProductPreview";
 
 export default function FavoriteProduct({ product, component }) {
-  const { addToCart, setAlertData } = useContext(DataContext);
+  const { addToCart } = useContext(DataContext);
   const [selectedSize, setSelectedSize] = useState(
     product.sizes ? "Wybierz rozmiar" : null
   );
@@ -14,14 +14,9 @@ export default function FavoriteProduct({ product, component }) {
     if (
       selectedSize !== "Wybierz rozmiar" &&
       selectedSize !== "Wybierz rozmiar!"
-    ) {
+    )
       addToCart(product.id, selectedSize, product.price);
-      setAlertData({
-        show: true,
-        text: "Dodano produkt do koszyka!",
-        location: "koszyk",
-      });
-    } else setSelectedSize("Wybierz rozmiar!");
+    else setSelectedSize("Wybierz rozmiar!");
   }
 
   return (

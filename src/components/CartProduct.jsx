@@ -77,7 +77,7 @@ export default function CartProduct({ product }) {
                   </Form.Select>
                   <button
                     className=""
-                    onClick={() => deleteFromCart(product, product?.size)}
+                    onClick={() => deleteFromCart(product, product.size)}
                   >
                     <i className="bi bi-trash fs-4"></i>
                   </button>

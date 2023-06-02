@@ -15,7 +15,7 @@ export default function useTimeoutAlert() {
       }, 2500);
 
     return () => {
-      if (alertData.show) clearTimeout(action);
+      clearTimeout(action);
     };
   }, [alertData.show]);
 

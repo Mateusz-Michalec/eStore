@@ -13,7 +13,7 @@ export default function ProductPhoto({ product, component }) {
   const handleShowModalImg = () => setShowModalImg(true);
   // Modal Img End
 
-  const isFavorite = checkIsAlreadyAdded(product, favorites, true);
+  const isFavorite = checkIsAlreadyAdded(product.id, favorites);
 
   return (
     <>
@@ -59,7 +59,7 @@ export default function ProductPhoto({ product, component }) {
         {component !== "Cart" ? (
           <button
             className="position-absolute top-right"
-            onClick={() => toggleFavoriteProduct(product)}
+            onClick={() => toggleFavoriteProduct(product.id)}
           >
             <i
               className={`bi ${

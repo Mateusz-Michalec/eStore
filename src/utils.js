@@ -22,3 +22,22 @@ export function usdToPLN(usdPrice) {
 export function roundHalf(num) {
   return Math.round(num * 2) / 2;
 }
+
+export function getPromises(array) {
+  const promises = [];
+  const addedIds = [];
+  array.map((item) => {
+    if (typeof item === "object") {
+      if (addedIds.some((id) => id === item.id) === false) {
+        promises.push(fetch(`https://fakestoreapi.com/products/${item.id}`));
+        addedIds.push(item.id);
+      }
+    } else {
+      if (addedIds.some((id) => id === item) === false) {
+        promises.push(fetch(`https://fakestoreapi.com/products/${item}`));
+        addedIds.push(item);
+      }
+    }
+  });
+  return promises;
+}
