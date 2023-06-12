@@ -2,57 +2,38 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.scss";
 import Navbar from "./components/NavbarComp";
 import Footer from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/common/ScrollToTop";
 import { Suspense, lazy } from "react";
-import TimeoutFallback from "./components/TimeoutFallback";
+import TimeoutFallback from "./components/common/TimeoutFallback";
 
-const Home = lazy(() => import("./pages/Home"));
-const Product = lazy(() => import("./pages/Product"));
-const Favorites = lazy(() => import("./pages/Favorites"));
-const Cart = lazy(() => import("./pages/Cart"));
+const Home = lazy(() => import("./components/pages/Home"));
+const Product = lazy(() => import("./components/pages/Product"));
+const Favorites = lazy(() => import("./components/pages/Favorites"));
+const Cart = lazy(() => import("./components/pages/Cart"));
+const ProductsInCategory = lazy(() =>
+  import("./components/pages/ProductsInCategory")
+);
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route element={<Navbar />}>
+    <Suspense fallback={<TimeoutFallback />}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
           <Route
-            path="/"
-            element={
-              <Suspense fallback={<TimeoutFallback />}>
-                <Home />
-              </Suspense>
-            }
+            path="/products/category/:id"
+            element={<ProductsInCategory />}
           />
-          <Route
-            path={`/produkty/:id`}
-            element={
-              <Suspense fallback={<TimeoutFallback />}>
-                <Product />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/ulubione"
-            element={
-              <Suspense fallback={<TimeoutFallback />}>
-                <Favorites />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/koszyk"
-            element={
-              <Suspense fallback={<TimeoutFallback />}>
-                <Cart />
-              </Suspense>
-            }
-          />
-        </Route>
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+          <Route path={`/products/:id`} element={<Product />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </Suspense>
   );
 }
 

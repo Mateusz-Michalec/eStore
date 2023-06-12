@@ -9,9 +9,11 @@ export default function ProductPreview({ product, component }) {
       <ProductPhoto product={product} component={component} />
       <section>
         <div className="product-preview-title mt-1">
-          <Link to={`/produkty/${product.id}`}>{product.title}</Link>
+          <Link to={`/products/${product.id}`}>{product.title}</Link>
         </div>
-        <p className="fs-7 mb-0 text-main">{product.price} PLN</p>
+        {component !== "ProductsHistory" ? (
+          <p className="fs-7 mb-0 text-main">{product.price} PLN</p>
+        ) : null}
       </section>
     </>
   );

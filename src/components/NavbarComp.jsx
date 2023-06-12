@@ -1,43 +1,23 @@
-import electronics from "../assets/img/electronics-min.jpg";
-import jewelery from "../assets/img/jewelery-min.jpg";
-import mensClothing from "../assets/img/men's clothing-min.jpg";
-import womensClothing from "../assets/img/women's clothing-min.jpg";
-
 import React, { useEffect, useState, useRef, useContext } from "react";
 import DataContext from "../context/dataContext";
 import { Link, Outlet } from "react-router-dom";
 
 import { Container, Stack, Form, Nav, Navbar } from "react-bootstrap";
-import Badge from "./Badge";
-import TimeoutAlert from "./TimeoutAlert";
+import Badge from "./common/Badge";
+import TimeoutAlert from "./common/TimeoutAlert";
+import { images } from "../constants";
+import CartContext from "../context/CartContext";
+import FavoritesContext from "../context/FavoritesContext";
 
 export default function NavbarComp() {
+  const { categories } = useContext(DataContext);
+  const { cart } = useContext(CartContext);
+  const { favorites } = useContext(FavoritesContext);
   const [isSearch, setIsSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { categories, cart, favorites } = useContext(DataContext);
+  const [categoriesImages] = useState(images.getCategoriesImages);
 
   const hamburger = useRef();
-
-  function categoriesImages() {
-    return [
-      {
-        img: electronics,
-        alt: "electronics",
-      },
-      {
-        img: jewelery,
-        alt: "jewelery",
-      },
-      {
-        img: mensClothing,
-        alt: "men's clothing",
-      },
-      {
-        img: womensClothing,
-        alt: "women's clothing",
-      },
-    ];
-  }
 
   // Search
   const search = useRef();
@@ -95,18 +75,17 @@ export default function NavbarComp() {
               <button onClick={() => toggleSearch()}>
                 <i className="bi bi-search fs-5 nav-icon"></i>
               </button>
-              <Link to="/ulubione">
+              <Link to="/favorites">
                 <button className="position-relative">
                   <i className="bi bi-heart fs-5 nav-icon"></i>
-                  {favorites.length >= 1 ? (
-                    <Badge value={favorites.length} />
-                  ) : null}
+
+                  <Badge value={favorites.length} />
                 </button>
               </Link>
-              <Link to="/koszyk">
+              <Link to="/cart">
                 <button className="position-relative">
                   <i className="bi bi-bag fs-5 nav-icon"></i>
-                  {cart.length >= 1 ? <Badge value={cart.length} /> : null}
+                  <Badge value={cart.length} />
                 </button>
               </Link>
             </Stack>
@@ -125,8 +104,8 @@ export default function NavbarComp() {
                   <div>
                     <img
                       className="me-3 ms-3 rounded-circle nav-link-icon"
-                      src={categoriesImages()[i].img}
-                      alt={categoriesImages()[i].alt}
+                      src={categoriesImages[i].img}
+                      alt={categoriesImages[i].alt}
                     />
                     {category}
                   </div>

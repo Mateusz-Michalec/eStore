@@ -1,38 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import DataContext from "../context/dataContext";
 import ProductPhoto from "./ProductPhoto";
 
-export default function CartProduct({ product }) {
-  function getAvailableSizesQuantity() {
-    const sizeObj = product.sizes.find((item) => item[product.size]);
-    return Object.values(sizeObj)[0];
-  }
-
-  function renderQuantityOptions() {
-    const available = product.sizes
-      ? getAvailableSizesQuantity()
-      : product.available;
-    const elements = [];
-    for (let i = 1; i < 21; i++) {
-      elements.push(
-        <option disabled={i > available} key={i} value={i}>
-          {i}
-        </option>
-      );
-    }
-    return elements;
-  }
-
-  const { updateCart, deleteFromCart } = useContext(DataContext);
-  const [quantityOptions, setQuantityOptions] = useState(renderQuantityOptions);
+export default function CartProduct({ product, updateCart, deleteFromCart }) {
   const [quantity, setQuantity] = useState(product.quantity);
 
   function handleQuantityChange(e) {
     setQuantity(e.target.value);
-    updateCart(product.id, product.size, Number(e.target.value));
+    updateCart(product, Number(e.target.value));
   }
 
   return (
@@ -59,12 +35,17 @@ export default function CartProduct({ product }) {
                   <br />
                 )}
 
-                <span>
-                  Suma:{" "}
-                  <strong className="text-main">
-                    {product.price * product.quantity} PLN
-                  </strong>
-                </span>
+                <Stack direction="horizontal" gap={3}>
+                  <div>
+                    <span>Suma: </span>
+                    <strong className="text-main">
+                      {product.price * product.quantity} PLN
+                    </strong>
+                  </div>
+                  <span className="text-secondary">
+                    ({product.quantity} x {product.price} PLN)
+                  </span>
+                </Stack>
 
                 <Stack direction="horizontal" className="my-2">
                   <Form.Select
@@ -73,12 +54,17 @@ export default function CartProduct({ product }) {
                     aria-label="Wybór ilości"
                     className="rounded-0 me-3"
                   >
-                    {quantityOptions}
+                    {[...Array(20)].map((x, i) => (
+                      <option
+                        disabled={i + 1 > product.available}
+                        key={i + 1}
+                        value={i + 1}
+                      >
+                        {i + 1}
+                      </option>
+                    ))}
                   </Form.Select>
-                  <button
-                    className=""
-                    onClick={() => deleteFromCart(product, product.size)}
-                  >
+                  <button className="" onClick={() => deleteFromCart(product)}>
                     <i className="bi bi-trash fs-4"></i>
                   </button>
                 </Stack>

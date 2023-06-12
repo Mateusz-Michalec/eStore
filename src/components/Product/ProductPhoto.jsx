@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import DataContext from "../context/dataContext";
 import { Modal } from "react-bootstrap";
-import ConditionalLink from "./ConditionalLink";
+import ConditionalLink from "../common/ConditionalLink";
+import { SearchUtils } from "../../utils";
+import FavoritesContext from "../../context/FavoritesContext";
 
 export default function ProductPhoto({ product, component }) {
-  const { toggleFavoriteProduct, checkIsAlreadyAdded, favorites } =
-    useContext(DataContext);
+  const { toggleFavoriteProduct, favorites } = useContext(FavoritesContext);
 
   // Modal Img
   const [showModalImg, setShowModalImg] = useState(false);
@@ -13,7 +13,7 @@ export default function ProductPhoto({ product, component }) {
   const handleShowModalImg = () => setShowModalImg(true);
   // Modal Img End
 
-  const isFavorite = checkIsAlreadyAdded(product.id, favorites);
+  const isFavorite = SearchUtils.checkIsAlreadyAdded(product, favorites);
 
   return (
     <>
@@ -40,7 +40,7 @@ export default function ProductPhoto({ product, component }) {
         }`}
       >
         <ConditionalLink
-          path={`/produkty/${product.id}`}
+          path={`/products/${product.id}`}
           condition={component !== "Product"}
           children={
             <img
@@ -59,7 +59,7 @@ export default function ProductPhoto({ product, component }) {
         {component !== "Cart" ? (
           <button
             className="position-absolute top-right"
-            onClick={() => toggleFavoriteProduct(product.id)}
+            onClick={() => toggleFavoriteProduct(product)}
           >
             <i
               className={`bi ${

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Breadcrumb,
@@ -10,24 +10,32 @@ import {
   Stack,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import DataContext from "../context/dataContext";
-import useInView from "../hooks/useInView";
-import Sizes from "../components/Sizes";
-import StarsRating from "../components/StarsRating";
-import ProductPhoto from "../components/ProductPhoto";
-import ProductsHistory from "../components/ProductsHistory";
+import DataContext from "../../context/dataContext";
+import useInView from "../../hooks/useInView";
+import Sizes from "../Product/Sizes";
+import StarsRating from "../Product/StarsRating";
+import ProductPhoto from "../Product/ProductPhoto";
+import ProductsHistory from "../Product/ProductsHistory";
+import useFetch from "../../hooks/useFetch";
+import { ProductDataManipulation } from "../../utils";
+import CartContext from "../../context/CartContext";
 
 export default function Product() {
-  // Data Context
-  const { addToCart, getSingleProduct, addProductToHistory } =
-    useContext(DataContext);
-  // Data Context End
+  const { sizes } = useContext(DataContext);
+  const { addToCart } = useContext(CartContext);
 
-  // Get Product
   const { id } = useParams();
-  let [product, error, isLoading] = getSingleProduct(id);
+  const navigate = useNavigate();
+  const [product, isLoading, error] = useFetch(
+    `https://fakestoreapi.com/products/${id}`,
+    ProductDataManipulation.changeProductData,
+    id,
+    sizes
+  );
 
-  // Get Product End
+  useEffect(() => {
+    if (!isLoading && (error || !product)) navigate("/");
+  }, [isLoading]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
@@ -35,17 +43,22 @@ export default function Product() {
   const isIntersectingSizes = useInView(sizesRef, product);
   // AddToCart Btn intersecting end
 
-  // AddToCart
   function handleAddToCart() {
-    if (selectedSize) {
-      setIsSizeSelected(true);
-      addToCart(product.id, selectedSize, product.price);
+    if (product.sizes) {
+      if (selectedSize) {
+        setIsSizeSelected(true);
+        addToCart({
+          ...product,
+          size: selectedSize,
+        });
+      } else {
+        window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
+        setIsSizeSelected(false);
+      }
     } else {
-      window.scrollTo({ top: sizesRef.current.offsetTop - 100 });
-      setIsSizeSelected(false);
+      addToCart(product);
     }
   }
-  // AddToCart End
 
   // Sizes
   const [isLowSizes, setIsLowSizes] = useState();
@@ -58,11 +71,9 @@ export default function Product() {
   }
   // Sizes End
 
-  addProductToHistory(product);
-
   return (
-    <main className="my-5 px-3">
-      {product && isLoading === false ? (
+    <main className="my-5 px-3 px-lg-5">
+      {product ? (
         <>
           <article className="d-flex flex-column mb-4">
             <Breadcrumb className="fs-7 d-flex justify-content-center mb-4">
@@ -71,7 +82,7 @@ export default function Product() {
               </Breadcrumb.Item>
               <Breadcrumb.Item
                 linkAs={Link}
-                linkProps={{ to: `/produkty/kategoria/${product.category}` }}
+                linkProps={{ to: `/products/category/${product.category}` }}
               >
                 {product.category}
               </Breadcrumb.Item>
@@ -126,7 +137,7 @@ export default function Product() {
                     </section>
                   ) : null}
 
-                  {isIntersectingSizes === false ? (
+                  {!isIntersectingSizes ? (
                     <div className="fixed-bottom fixed-btn d-md-none px-4 py-3 bg-white border-1 border-top shadow">
                       <Button
                         variant={isSizeSelected ? "dark" : "secondary"}
@@ -156,10 +167,19 @@ export default function Product() {
               </Row>
             </Container>
           </article>
-          <ProductsHistory currentProductId={product.id} />
+          <ProductsHistory
+            currentProduct={{
+              id: product.id,
+              title: product.title,
+              image: product.image,
+              price: product.price,
+              available: product.available,
+              sizes: product.sizes,
+            }}
+          />
         </>
       ) : (
-        <div className="loader mx-auto"></div>
+        <div className="loader" />
       )}
     </main>
   );

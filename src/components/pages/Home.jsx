@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 
-import hero from "../assets/img/hero.jpg";
+import { images } from "../../constants";
 import { Link } from "react-router-dom";
 
-import DataContext from "../context/dataContext";
-import useFetch from "../hooks/useFetch";
+import DataContext from "../../context/dataContext";
+import useFetch from "../../hooks/useFetch";
 
 import {
   Button,
@@ -36,20 +36,22 @@ export default function Home() {
         <br />
         Zostań Klubowiczem!
       </Link>
-      <Link to="/produkty/kategoria/jewelery">
-        <Container className="position-relative overflow-hidden p-0">
+
+      <Container className="position-relative overflow-hidden p-0">
+        <Link to="/products/category/jewelery">
           <div className="hero-body position-absolute w-100 text-center text-main">
             <h2 className="mb-1">Przygotuj się na lato</h2>
             <p className="mb-5">Modne dodatki w atrakcyjnych cenach.</p>
           </div>
           <img
-            src={hero}
+            src={images.hero}
             className="img-fluid w-100"
             style={{ maxHeight: "50vh" }}
             alt="Plaża"
           />
-        </Container>
-      </Link>
+        </Link>
+      </Container>
+
       <section>
         <Container className="text-center section-1-bg mt-4 p-4">
           <h5 className="text-main">
@@ -79,7 +81,7 @@ export default function Home() {
           <Container id="categories" className="p-0">
             {categories?.map((category) => (
               <Row key={`${category}-home`}>
-                <Link to={`/produkty/kategoria/${category}`}>
+                <Link to={`/products/category/${category}`}>
                   <Col className="d-flex category-col p-3 justify-content-between align-items-center">
                     <span className="m-0 d-inline-block">{category}</span>
                     <button type="button">
@@ -99,7 +101,7 @@ export default function Home() {
             <Carousel className="mx-auto max-800">
               {carouselProducts.map((product) => (
                 <Carousel.Item key={product.id}>
-                  <Link to={`/produkty/${product.id}`}>
+                  <Link to={`/products/${product.id}`}>
                     <img
                       className="d-block w-100 max-vh-35 img-contain"
                       src={product.image}
@@ -134,8 +136,8 @@ export default function Home() {
       </section>
       <section className="mt-5 mb-4">
         {mostPopularProduct ? (
-          <Link to={`/produkty/${mostPopularProduct?.id}`}>
-            <Container className="border border-3 p-4">
+          <Container className="border border-2 p-4">
+            <Link to={`/products/${mostPopularProduct?.id}`}>
               <img
                 className="d-block mx-auto max-vh-35 img-contain"
                 src={mostPopularProduct.image}
@@ -143,8 +145,8 @@ export default function Home() {
               />
 
               <h3 className="text-center mt-4 mb-0">Na fali</h3>
-            </Container>
-          </Link>
+            </Link>
+          </Container>
         ) : (
           <div className="loader"></div>
         )}

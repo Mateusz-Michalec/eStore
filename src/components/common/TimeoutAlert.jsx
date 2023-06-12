@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import DataContext from "../context/dataContext";
+import DataContext from "../../context/dataContext";
 
 export default function TimeoutAlert() {
   const { alertData } = useContext(DataContext);

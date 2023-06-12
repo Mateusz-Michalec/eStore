@@ -1,21 +1,24 @@
 import React, { useContext, useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
 import Sizes from "./Sizes";
-import DataContext from "../context/dataContext";
 import ProductPreview from "./ProductPreview";
+import CartContext from "../../context/CartContext";
 
 export default function FavoriteProduct({ product, component }) {
-  const { addToCart } = useContext(DataContext);
+  const { addToCart } = useContext(CartContext);
   const [selectedSize, setSelectedSize] = useState(
     product.sizes ? "Wybierz rozmiar" : null
   );
+
+  console.log(product);
 
   function handleAddToCart() {
     if (
       selectedSize !== "Wybierz rozmiar" &&
       selectedSize !== "Wybierz rozmiar!"
     )
-      addToCart(product.id, selectedSize, product.price);
+      if (product.sizes) addToCart({ ...product, size: selectedSize });
+      else addToCart(product);
     else setSelectedSize("Wybierz rozmiar!");
   }
 
