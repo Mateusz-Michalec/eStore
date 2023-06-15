@@ -49,7 +49,7 @@ export default function ProductPhoto({ product, component }) {
               }
             ${
               component !== "Product" ? "product-preview-img" : "px-4"
-            }  img-contain cursor-pointer`}
+            }  img-contain cursor-pointer zoom-out`}
               src={product.image}
               alt={product.title}
               onClick={component === "Product" ? handleShowModalImg : null}

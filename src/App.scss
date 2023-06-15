@@ -23,22 +23,6 @@
 }
 
 // General
-*,
-::after,
-::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.overlay {
-  z-index: 10;
-  background: $black;
-  opacity: 0.5;
-  position: fixed;
-  inset: 0;
-}
-
 body {
   font-family: "Ubuntu", sans-serif;
   letter-spacing: 1px;
@@ -64,15 +48,15 @@ i {
   height: 40px;
   width: 40px;
   object-fit: cover;
+
+  &:hover {
+    color: #003467;
+  }
 }
 
 a {
   text-decoration: none;
   color: unset;
-}
-
-img {
-  object-fit: cover;
 }
 
 .zoom-out {
@@ -84,6 +68,11 @@ img {
 }
 
 // Home
+
+.hero-img {
+  height: 50vh;
+  object-fit: cover;
+}
 
 .hero-body {
   top: 12%;
@@ -104,9 +93,8 @@ img {
   background: white;
 }
 
+.nav-icon,
 .nav-link,
-.link,
-i,
 a {
   &:hover,
   &:active,
@@ -117,22 +105,10 @@ a {
 
 .navbar-toggler {
   border: none;
-
-  &:active,
-  &:focus {
-    outline: 2px solid black;
-    box-shadow: none;
-  }
-
-  &-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
 }
 
 .nav-link {
-  color: black;
-  opacity: 1;
+  color: rgba(0, 0, 0, 1);
   transition: none;
 }
 
@@ -184,25 +160,12 @@ a {
   }
 }
 
-.max-800 {
-  max-width: 800px;
-}
-
 .min-width-80px {
   min-width: 80px;
 }
 
-.max-vh-35 {
-  max-height: 35vh;
-}
-
 .vh-30 {
-  min-height: 30vh;
-  max-height: 30vh;
-}
-
-.img-cover {
-  object-fit: cover;
+  height: 30vh;
 }
 
 .img-contain {
@@ -260,8 +223,8 @@ a {
 }
 
 .bage-positon {
-  top: 15px;
-  left: 10px;
+  top: 18px;
+  left: 15px;
 }
 
 .pointer-none {

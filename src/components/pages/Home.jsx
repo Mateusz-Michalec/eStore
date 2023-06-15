@@ -37,18 +37,13 @@ export default function Home() {
         Zostań Klubowiczem!
       </Link>
 
-      <Container className="position-relative overflow-hidden p-0">
+      <Container className="position-relative p-0">
         <Link to="/products/category/jewelery">
           <div className="hero-body position-absolute w-100 text-center text-main">
             <h2 className="mb-1">Przygotuj się na lato</h2>
             <p className="mb-5">Modne dodatki w atrakcyjnych cenach.</p>
           </div>
-          <img
-            src={images.hero}
-            className="img-fluid w-100"
-            style={{ maxHeight: "50vh" }}
-            alt="Plaża"
-          />
+          <img src={images.hero} className="w-100 hero-img" alt="Plaża" />
         </Link>
       </Container>
 
@@ -98,12 +93,12 @@ export default function Home() {
         <h4 className="mb-4 text-sm-center">Zainspiruj się</h4>
         <Container>
           {carouselProducts ? (
-            <Carousel className="mx-auto max-800">
+            <Carousel className="mx-auto">
               {carouselProducts.map((product) => (
                 <Carousel.Item key={product.id}>
                   <Link to={`/products/${product.id}`}>
                     <img
-                      className="d-block w-100 max-vh-35 img-contain"
+                      className="d-block vh-30 w-100 img-contain"
                       src={product.image}
                       alt={product.title}
                     />
@@ -139,7 +134,7 @@ export default function Home() {
           <Container className="border border-2 p-4">
             <Link to={`/products/${mostPopularProduct?.id}`}>
               <img
-                className="d-block mx-auto max-vh-35 img-contain"
+                className="d-block mx-auto vh-30 img-contain"
                 src={mostPopularProduct.image}
                 alt={mostPopularProduct.title}
               />

@@ -30,10 +30,6 @@ export default function useFetch(url, callback, id, sizes) {
         setIsLoading(false);
       }
     })();
-
-    return () => {
-      setIsLoading(true);
-    };
   }, [id, url]);
 
   return [data, isLoading, error, sortData];
