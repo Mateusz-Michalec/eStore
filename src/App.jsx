@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.scss";
-import Navbar from "./components/NavbarComp";
+import NavbarComp from "./components/Navbar/NavbarComp";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 import { Suspense, lazy } from "react";
@@ -19,7 +19,7 @@ function App() {
     <Suspense fallback={<TimeoutFallback />}>
       <BrowserRouter>
         <ScrollToTop />
-        <Navbar />
+        <NavbarComp />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route

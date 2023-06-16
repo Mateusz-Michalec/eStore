@@ -103,6 +103,13 @@ a {
   }
 }
 
+.navbar-text a {
+  color: $dark;
+  &:hover {
+    @extend .text-main;
+  }
+}
+
 .navbar-toggler {
   border: none;
 }
@@ -247,6 +254,10 @@ a {
 
 .no-effect:hover {
   color: unset;
+}
+
+.search-results {
+  max-height: 12rem;
 }
 
 .loader {

@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
 import useFetch from "../hooks/useFetch";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { ProductSizes } from "../utils";
 import useTimeoutAlert from "../hooks/useTimeoutAlert";
 

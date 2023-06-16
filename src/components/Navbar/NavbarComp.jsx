@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
-import DataContext from "../context/dataContext";
+import DataContext from "../../context/dataContext";
 import { Link, Outlet } from "react-router-dom";
 
-import { Container, Stack, Form, Nav, Navbar } from "react-bootstrap";
-import Badge from "./common/Badge";
-import TimeoutAlert from "./common/TimeoutAlert";
-import { images } from "../constants";
-import CartContext from "../context/CartContext";
-import FavoritesContext from "../context/FavoritesContext";
+import { Stack, Nav, Navbar } from "react-bootstrap";
+import Badge from "../common/Badge";
+import TimeoutAlert from "../common/TimeoutAlert";
+import { images } from "../../constants";
+import CartContext from "../../context/CartContext";
+import FavoritesContext from "../../context/FavoritesContext";
+import Search from "./Search";
 
 export default function NavbarComp() {
   const { categories } = useContext(DataContext);
@@ -21,7 +22,6 @@ export default function NavbarComp() {
 
   // Search
   const search = useRef();
-  const [searchValue, setSearchValue] = useState("");
 
   function toggleSearch() {
     if (isMenuOpen) hamburger.current.click();
@@ -30,9 +30,6 @@ export default function NavbarComp() {
   function toggleHamburger() {
     setIsSearch(false);
     setIsMenuOpen(!isMenuOpen);
-  }
-  function handleSearch(e) {
-    setSearchValue(e.target.value);
   }
 
   useEffect(() => {
@@ -116,28 +113,7 @@ export default function NavbarComp() {
           </Nav>
         </Navbar.Collapse>
 
-        {isSearch ? (
-          <Navbar.Text className="w-100 mt-2 mb-3 p-0 order-lg-2">
-            <Container>
-              <Form className="d-flex border rounded align-items-center px-3">
-                <i className="bi bi-search fs-6"></i>
-                <Form.Control
-                  ref={search}
-                  value={searchValue}
-                  onChange={handleSearch}
-                  type="search"
-                  className="flex-grow-1 py-2"
-                  placeholder="Szukaj produktów"
-                  aria-label="Szukaj produktów"
-                />
-                <div className="vr me-3 ms-1" />
-                <button type="button" onClick={() => toggleSearch()}>
-                  <i className="bi bi-x-lg fs-6"></i>
-                </button>
-              </Form>
-            </Container>
-          </Navbar.Text>
-        ) : null}
+        {isSearch ? <Search ref={search} setIsSearch={setIsSearch} /> : null}
       </Navbar>
       <Outlet />
     </>

@@ -27,9 +27,5 @@ function getCategoriesImages() {
 
 export default {
   hero,
-  electronics,
-  jewelery,
-  mensClothing,
-  womensClothing,
   getCategoriesImages,
 };
