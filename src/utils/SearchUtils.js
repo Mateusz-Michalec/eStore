@@ -1,7 +1,5 @@
-function checkIsAlreadyAdded(product, array) {
-  return array.find(
-    (item) => item.id === product.id && item?.size === product?.size
-  );
+function checkIsAlreadyAdded(id, array) {
+  return array.find((product) => product.id === id);
 }
 
 function getAvailableSizesQuantity(product) {
@@ -9,4 +7,14 @@ function getAvailableSizesQuantity(product) {
   return Object.values(sizeObj)[0];
 }
 
-export default { checkIsAlreadyAdded, getAvailableSizesQuantity };
+function getMostPopularProduct(products) {
+  return products?.reduce((prev, current) =>
+    prev.rating.count > current.rating.count ? prev : current
+  );
+}
+
+export default {
+  checkIsAlreadyAdded,
+  getAvailableSizesQuantity,
+  getMostPopularProduct,
+};

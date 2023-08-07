@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Row } from "react-bootstrap";
-import FavoriteProduct from "../Product/FavoriteProduct";
-import PageHeader from "../common/PageHeader";
-import Empty from "../common/Empty";
-import FavoritesContext from "../../context/FavoritesContext";
+import FavoriteProduct from "./FavoriteProduct";
+import PageHeader from "../../components/common/PageHeader";
+import Empty from "../../components/common/Empty";
+import { useSelector } from "react-redux";
+import { selectFavorites } from "./favoritesSlice";
 
 export default function Favorites() {
-  const { favorites } = useContext(FavoritesContext);
+  const favorites = useSelector(selectFavorites);
 
   return (
     <main className="px-4 px-lg-5 py-5 mb-5">

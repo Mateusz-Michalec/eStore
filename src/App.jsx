@@ -8,7 +8,7 @@ import TimeoutFallback from "./components/common/TimeoutFallback";
 
 const Home = lazy(() => import("./components/pages/Home"));
 const Product = lazy(() => import("./components/pages/Product"));
-const Favorites = lazy(() => import("./components/pages/Favorites"));
+const Favorites = lazy(() => import("./features/favorites/Favorites"));
 const Cart = lazy(() => import("./components/pages/Cart"));
 const ProductsInCategory = lazy(() =>
   import("./components/pages/ProductsInCategory")

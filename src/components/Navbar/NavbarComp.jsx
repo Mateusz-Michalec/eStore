@@ -1,22 +1,25 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import DataContext from "../../context/dataContext";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import { Stack, Nav, Navbar } from "react-bootstrap";
 import Badge from "../common/Badge";
 import TimeoutAlert from "../common/TimeoutAlert";
 import { images } from "../../constants";
-import CartContext from "../../context/CartContext";
-import FavoritesContext from "../../context/FavoritesContext";
 import Search from "./Search";
+import { useGetCategoriesQuery } from "../../features/api/fakeStoreApi";
+import { useSelector } from "react-redux";
+import { getFavoritesCount } from "../../features/favorites/favoritesSlice";
+import { getCartItemsCount } from "../../features/cart/cartSlice";
 
 export default function NavbarComp() {
-  const { categories } = useContext(DataContext);
-  const { cart } = useContext(CartContext);
-  const { favorites } = useContext(FavoritesContext);
   const [isSearch, setIsSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [categoriesImages] = useState(images.getCategoriesImages);
+
+  const { data: categories, isLoading } = useGetCategoriesQuery();
+
+  const favoritesCount = useSelector(getFavoritesCount);
+  const cartCount = useSelector(getCartItemsCount);
 
   const hamburger = useRef();
 
@@ -44,7 +47,7 @@ export default function NavbarComp() {
         bg="white"
         sticky="top"
         className={`${
-          !categories ? "glow" : ""
+          isLoading ? "glow" : ""
         } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
         <TimeoutAlert />
@@ -76,13 +79,13 @@ export default function NavbarComp() {
                 <button className="position-relative">
                   <i className="bi bi-heart fs-5 nav-icon"></i>
 
-                  <Badge value={favorites.length} />
+                  <Badge value={favoritesCount} />
                 </button>
               </Link>
               <Link to="/cart">
                 <button className="position-relative">
                   <i className="bi bi-bag fs-5 nav-icon"></i>
-                  <Badge value={cart.length} />
+                  <Badge value={cartCount} />
                 </button>
               </Link>
             </Stack>

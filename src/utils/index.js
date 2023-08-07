@@ -1,13 +1,13 @@
 import ProductSort from "./ProductSort";
 import MathUtils from "./MathUtils";
-import ProductSizes from "./ProductSizes";
 import ProductDataManipulation from "./ProductDataManipulation";
 import SearchUtils from "./SearchUtils";
+import LocalStorage from "./LocalStorage";
 
 export {
   ProductSort,
   MathUtils,
-  ProductSizes,
   ProductDataManipulation,
   SearchUtils,
+  LocalStorage,
 };

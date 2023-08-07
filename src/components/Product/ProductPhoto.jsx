@@ -1,11 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import ConditionalLink from "../common/ConditionalLink";
-import { SearchUtils } from "../../utils";
-import FavoritesContext from "../../context/FavoritesContext";
+import {
+  checkIsFavorite,
+  toggleFavorite,
+} from "../../features/favorites/favoritesSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductPhoto({ product, component }) {
-  const { toggleFavoriteProduct, favorites } = useContext(FavoritesContext);
+  const dispatch = useDispatch();
 
   // Modal Img
   const [showModalImg, setShowModalImg] = useState(false);
@@ -13,7 +16,7 @@ export default function ProductPhoto({ product, component }) {
   const handleShowModalImg = () => setShowModalImg(true);
   // Modal Img End
 
-  const isFavorite = SearchUtils.checkIsAlreadyAdded(product, favorites);
+  const isFavorite = useSelector((state) => checkIsFavorite(state, product.id));
 
   return (
     <>
@@ -59,7 +62,7 @@ export default function ProductPhoto({ product, component }) {
         {component !== "Cart" ? (
           <button
             className="position-absolute top-right"
-            onClick={() => toggleFavoriteProduct(product)}
+            onClick={() => dispatch(toggleFavorite(product.id))}
           >
             <i
               className={`bi ${

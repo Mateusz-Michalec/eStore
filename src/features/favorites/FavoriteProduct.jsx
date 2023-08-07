@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
-import Sizes from "./Sizes";
-import ProductPreview from "./ProductPreview";
+import Sizes from "../../components/Product/Sizes";
+import ProductPreview from "../../components/Product/ProductPreview";
 import CartContext from "../../context/CartContext";
 
 export default function FavoriteProduct({ product, component }) {

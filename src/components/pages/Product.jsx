@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -10,32 +10,44 @@ import {
   Stack,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import DataContext from "../../context/dataContext";
 import useInView from "../../hooks/useInView";
 import Sizes from "../Product/Sizes";
 import StarsRating from "../Product/StarsRating";
 import ProductPhoto from "../Product/ProductPhoto";
 import ProductsHistory from "../Product/ProductsHistory";
-import useFetch from "../../hooks/useFetch";
-import { ProductDataManipulation } from "../../utils";
-import CartContext from "../../context/CartContext";
+
+import { useGetProductQuery } from "../../features/api/fakeStoreApi";
+import { addToCart } from "../../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getSizeQuantity } from "../../features/sizesSlice";
 
 export default function Product() {
-  const { sizes } = useContext(DataContext);
-  const { addToCart } = useContext(CartContext);
-
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, isLoading, error] = useFetch(
-    `https://fakestoreapi.com/products/${id}`,
-    ProductDataManipulation.changeProductData,
-    id,
-    sizes
-  );
+
+  const { data: product, isLoading, isError } = useGetProductQuery(id);
 
   useEffect(() => {
-    if (!isLoading && (error || !product)) navigate("/");
-  }, [isLoading]);
+    if (isError) navigate("/");
+  }, [isError]);
+
+  // Sizes
+  const [isLowSizes, setIsLowSizes] = useState();
+  const [selectedSize, setSelectedSize] = useState("");
+  const [isSizeSelected, setIsSizeSelected] = useState();
+
+  function handleSizeSelect(e) {
+    setSelectedSize(e.currentTarget.id);
+    setIsSizeSelected(true);
+  }
+  // Sizes End
+
+  const sizeQuantity = useSelector((state) =>
+    getSizeQuantity(state, product?.id, selectedSize)
+  );
+
+  console.log(sizeQuantity);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
@@ -47,29 +59,21 @@ export default function Product() {
     if (product.sizes) {
       if (selectedSize) {
         setIsSizeSelected(true);
-        addToCart({
-          ...product,
-          size: selectedSize,
-        });
+        dispatch(
+          addToCart({
+            id: product.id,
+            size: selectedSize,
+            sizeQuantity: sizeQuantity,
+          })
+        );
       } else {
         window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
         setIsSizeSelected(false);
       }
     } else {
-      addToCart(product);
+      dispatch(addToCart({ id: product.id, available: product.available }));
     }
   }
-
-  // Sizes
-  const [isLowSizes, setIsLowSizes] = useState();
-  const [selectedSize, setSelectedSize] = useState();
-  const [isSizeSelected, setIsSizeSelected] = useState();
-
-  function handleSizeSelect(e) {
-    setSelectedSize(e.currentTarget.id);
-    setIsSizeSelected(true);
-  }
-  // Sizes End
 
   return (
     <main className="my-5 px-3 px-lg-5">

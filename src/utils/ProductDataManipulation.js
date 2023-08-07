@@ -1,24 +1,22 @@
-import mathUtils from "./MathUtils";
+import { store } from "../app/store";
+import { selectSizesByProductId } from "../features/sizesSlice";
+import MathUtils from "./MathUtils";
 
-function changeProductData(product, sizes) {
-  return {
-    ...product,
-    price: mathUtils.usdToPLN(product.price),
-    sizes:
-      product.category === "men's clothing" ||
-      product.category === "women's clothing"
-        ? sizes[product.id]
-        : null,
-    available:
-      product.category !== "men's clothing" &&
-      product.category !== "women's clothing"
-        ? Math.floor(Math.random() * 20)
-        : null,
-  };
+function changeProductData(product) {
+  if (
+    product.category === "men's clothing" ||
+    product.category === "women's clothing"
+  ) {
+    const sizes = store.getState().sizes;
+    product.sizes = selectSizesByProductId(sizes, product.id);
+  } else product.available = Math.floor(Math.random() * 20);
+  product.price = MathUtils.usdToPLN(product.price);
+
+  return product;
 }
 
-function changeProductsData(products, sizes) {
-  return products.map((product) => changeProductData(product, sizes));
+function changeProductsData(products) {
+  return products.map((product) => changeProductData(product));
 }
 
 export default { changeProductData, changeProductsData };

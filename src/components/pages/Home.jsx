@@ -1,10 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { images } from "../../constants";
 import { Link } from "react-router-dom";
 
-import DataContext from "../../context/dataContext";
-import useFetch from "../../hooks/useFetch";
+import {
+  useGetAllProductsQuery,
+  useGetCarouselProductsQuery,
+  useGetCategoriesQuery,
+} from "../../features/api/fakeStoreApi";
 
 import {
   Button,
@@ -14,20 +17,20 @@ import {
   Collapse,
   Container,
 } from "react-bootstrap";
+import { SearchUtils } from "../../utils";
 
 export default function Home() {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const { categories, allProducts } = useContext(DataContext);
+  const [mostPopularProduct, setMostPopularProduct] = useState();
 
-  const [carouselProducts] = useFetch(
-    "https://fakestoreapi.com/products?limit=5"
-  );
+  const { data: categories } = useGetCategoriesQuery();
+  const { data: allProducts } = useGetAllProductsQuery();
+  const { data: carouselProducts, isLoading: isLoadingCarousel } =
+    useGetCarouselProductsQuery();
 
-  let mostPopularProduct;
-  if (allProducts)
-    mostPopularProduct = allProducts.reduce((prev, current) =>
-      prev.rating.count > current.rating.count ? prev : current
-    );
+  useEffect(() => {
+    setMostPopularProduct(SearchUtils.getMostPopularProduct(allProducts));
+  }, [allProducts]);
 
   return (
     <main className="p-4">
@@ -91,7 +94,9 @@ export default function Home() {
         <section className="mt-5">
           <h4 className="mb-4 text-sm-center">Zainspiruj się</h4>
 
-          {carouselProducts ? (
+          {isLoadingCarousel ? (
+            <div className="loader" />
+          ) : (
             <Carousel className="mx-auto">
               {carouselProducts.map((product) => (
                 <Carousel.Item key={product.id}>
@@ -108,8 +113,6 @@ export default function Home() {
                 </Carousel.Item>
               ))}
             </Carousel>
-          ) : (
-            <div className="loader"></div>
           )}
         </section>
         <section className="section-2-bg text-white p-4 text-center mt-5">

@@ -10,6 +10,7 @@ import DataContext from "../../context/dataContext";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { ProductDataManipulation, ProductSort } from "../../utils";
+import { useGetProductsByCategoryQuery } from "../../features/api/fakeStoreApi";
 
 export default function ProductsInCategory() {
   const { sizes } = useContext(DataContext);
@@ -18,15 +19,14 @@ export default function ProductsInCategory() {
   const [sortBtnText, setSortBtnText] = useState("rosnąco");
   const navigate = useNavigate();
 
-  const [products, isLoading, error, sortData] = useFetch(
-    `https://fakestoreapi.com/products/category/${id}?sort=${sortValue}`,
-    ProductDataManipulation.changeProductsData,
-    id,
-    sizes
-  );
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useGetProductsByCategoryQuery(id, sortValue);
 
   useEffect(() => {
-    if (!isLoading && (error || products.length === 0)) navigate("/");
+    if (isError) navigate("/");
   }, [isLoading]);
 
   function handleSort(sortType, value) {
@@ -78,7 +78,7 @@ export default function ProductsInCategory() {
         <Row className="g-5">
           {!isLoading
             ? products?.map((product) => (
-                <Col xs={12} md={6} xl={4} xxl={3} key={`h_${product.id}`}>
+                <Col xs={12} md={6} xl={4} xxl={3} key={product.id}>
                   <ProductPreview
                     product={product}
                     component={"ProductsInCategory"}
@@ -86,7 +86,7 @@ export default function ProductsInCategory() {
                 </Col>
               ))
             : [...Array(4)].map((x, i) => (
-                <Col xs={12} md={6} xl={4} xxl={3} key={`h_${i}`}>
+                <Col xs={12} md={6} xl={4} xxl={3} key={i}>
                   <ProductPreviewPlaceholder />
                 </Col>
               ))}
