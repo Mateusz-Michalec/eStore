@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 import { Stack, Nav, Navbar } from "react-bootstrap";
-import Badge from "../common/Badge";
-import TimeoutAlert from "../common/TimeoutAlert";
+import Badge from "./Badge";
 import { images } from "../../constants";
 import Search from "./Search";
 import { useGetCategoriesQuery } from "../../features/api/fakeStoreApi";
@@ -50,7 +49,7 @@ export default function NavbarComp() {
           isLoading ? "glow" : ""
         } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
-        <TimeoutAlert />
+        {/* <TimeoutAlert /> */}
         {categories ? (
           <Navbar.Toggle
             ref={hamburger}

@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ProductPhoto from "./ProductPhoto";
+import ProductPhoto from "../../components/Product/ProductPhoto";
+import { useDispatch } from "react-redux";
+import { deleteFromCart, updateQuantity } from "./cartSlice";
 
-export default function CartProduct({ product, updateCart, deleteFromCart }) {
+export default function CartProduct({ product }) {
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
 
-  function handleQuantityChange(e) {
+  const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
-    updateCart(product, Number(e.target.value));
-  }
+    dispatch(
+      updateQuantity({
+        id: product.id,
+        size: product?.size,
+        quantity: Number(e.target.value),
+      })
+    );
+  };
+
+  const handleDeleteItem = () => {
+    dispatch(deleteFromCart({ id: product.id, size: product?.size }));
+  };
 
   return (
     <Col xs={12} lg={6}>
@@ -64,7 +77,7 @@ export default function CartProduct({ product, updateCart, deleteFromCart }) {
                       </option>
                     ))}
                   </Form.Select>
-                  <button className="" onClick={() => deleteFromCart(product)}>
+                  <button onClick={() => handleDeleteItem()}>
                     <i className="bi bi-trash fs-4"></i>
                   </button>
                 </Stack>

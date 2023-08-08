@@ -13,6 +13,8 @@ export const fakeStoreApi = createApi({
     }),
     getAllProducts: builder.query({
       query: () => "/products",
+      transformResponse: (products) =>
+        ProductDataManipulation.changeProductsData(products),
     }),
     getProductsByCategory: builder.query({
       query: (categoryId, sortValue) =>
