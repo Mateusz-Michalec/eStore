@@ -11,10 +11,10 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useInView from "../../hooks/useInView";
-import Sizes from "../Product/Sizes";
-import StarsRating from "../Product/StarsRating";
-import ProductPhoto from "../Product/ProductPhoto";
-import ProductsHistory from "../Product/ProductsHistory";
+import Sizes from "./Sizes";
+import StarsRating from "./StarsRating";
+import ProductPhoto from "./ProductPhoto/ProductPhoto";
+import LastViewed from "../../features/lastViewed/LastViewed";
 
 import { useGetProductQuery } from "../../features/api/fakeStoreApi";
 import { addToCart } from "../../features/cart/cartSlice";
@@ -26,7 +26,12 @@ export default function Product() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data: product, isLoading, isError } = useGetProductQuery(id);
+  const {
+    data: product,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useGetProductQuery(id);
 
   useEffect(() => {
     if (isError) navigate("/");
@@ -46,8 +51,6 @@ export default function Product() {
   const sizeQuantity = useSelector((state) =>
     getSizeQuantity(state, product?.id, selectedSize)
   );
-
-  console.log(sizeQuantity);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
@@ -171,16 +174,7 @@ export default function Product() {
               </Row>
             </Container>
           </article>
-          <ProductsHistory
-            currentProduct={{
-              id: product.id,
-              title: product.title,
-              image: product.image,
-              price: product.price,
-              available: product.available,
-              sizes: product.sizes,
-            }}
-          />
+          {isSuccess ? <LastViewed productId={product.id} /> : null}
         </>
       ) : (
         <div className="loader" />

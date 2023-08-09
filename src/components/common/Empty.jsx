@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import ProductsHistory from "../Product/ProductsHistory";
+import LastViewed from "../../features/lastViewed/LastViewed";
 
 export default function Empty({ arrayLength, title }) {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Empty({ arrayLength, title }) {
             poprzedniej strony
           </Button>
         </header>
-        <ProductsHistory />
+        <LastViewed />
       </>
     );
   else return null;

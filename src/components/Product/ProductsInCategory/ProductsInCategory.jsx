@@ -1,19 +1,15 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
 import { Row, Col, Stack, Dropdown } from "react-bootstrap";
-import ProductPreviewPlaceholder from "../Placeholders/ProductPreviewPlaceholder";
-import ProductPreview from "../Product/ProductPreview";
-import ProductsHistory from "../Product/ProductsHistory";
-import PageHeader from "../common/PageHeader";
-import DataContext from "../../context/dataContext";
+import ProductPreviewPlaceholder from "./ProductInCategoryPlaceholder";
+import ProductPreview from "../ProductPreview";
+import PageHeader from "../../common/PageHeader/PageHeader";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
-import { ProductDataManipulation, ProductSort } from "../../utils";
-import { useGetProductsByCategoryQuery } from "../../features/api/fakeStoreApi";
+import { useGetProductsByCategoryQuery } from "../../../features/api/fakeStoreApi";
+import { sortByPriceAsc, sortByPriceDesc } from "../../../utils/ProductSort";
 
 export default function ProductsInCategory() {
-  const { sizes } = useContext(DataContext);
   const { id } = useParams();
   const [sortValue, setSortValue] = useState("asc");
   const [sortBtnText, setSortBtnText] = useState("rosnąco");
@@ -23,31 +19,47 @@ export default function ProductsInCategory() {
     data: products,
     isLoading,
     isError,
-  } = useGetProductsByCategoryQuery(id, sortValue);
+    isSuccess,
+    refetch,
+  } = useGetProductsByCategoryQuery({ categoryId: id, sortValue });
+
+  const [displayedProducts, setDisplayedProducts] = useState([]);
 
   useEffect(() => {
     if (isError) navigate("/");
-  }, [isLoading]);
+    if (isSuccess) setDisplayedProducts(products);
+  }, [isLoading, products]);
 
+  // Sorting
   function handleSort(sortType, value) {
     if (value === "name") {
       setSortValue(sortType);
-      setSortBtnText(sortType === "asc" ? "Rosnąco" : "Malejąco");
+      setSortBtnText(sortType === "asc" ? "rosnąco" : "malejąco");
     } else if (value === "price") {
-      sortData(
+      setDisplayedProducts(
         sortType === "asc"
-          ? ProductSort.sortByPriceAsc(products)
-          : ProductSort.sortByPriceDesc(products)
+          ? sortByPriceAsc(products)
+          : sortByPriceDesc(products)
       );
-      setSortBtnText(sortType === "asc" ? "Najniższa cena" : "Najwyższa cena");
+      setSortBtnText(sortType === "asc" ? "najniższa cena" : "najwyższa cena");
     }
   }
 
+  useEffect(() => {
+    if (sortBtnText === "rosnąco" || sortBtnText === "malejąco") refetch();
+  }, [sortValue]);
+
+  useEffect(() => {
+    setSortBtnText("rosnąco");
+  }, [id]);
+
+  // End sorting
+
   return (
-    <main className="py-5 px-4 px-lg-5">
-      {products ? (
+    <>
+      {isLoading ? null : (
         <Stack direction="horizontal" className="justify-content-between ">
-          <PageHeader title={id} array={products} />
+          <PageHeader title={id} arrayLength={products?.length} />
           <Dropdown>
             <Dropdown.Toggle
               className="text-uppercase"
@@ -73,26 +85,25 @@ export default function ProductsInCategory() {
             </DropdownMenu>
           </Dropdown>
         </Stack>
-      ) : null}
+      )}
       <section>
         <Row className="g-5">
-          {!isLoading
-            ? products?.map((product) => (
+          {isLoading
+            ? [...Array(6)].map((x, i) => (
+                <Col xs={12} md={6} xl={4} xxl={3} key={i}>
+                  <ProductPreviewPlaceholder />
+                </Col>
+              ))
+            : displayedProducts.map((product) => (
                 <Col xs={12} md={6} xl={4} xxl={3} key={product.id}>
                   <ProductPreview
                     product={product}
                     component={"ProductsInCategory"}
                   />
                 </Col>
-              ))
-            : [...Array(4)].map((x, i) => (
-                <Col xs={12} md={6} xl={4} xxl={3} key={i}>
-                  <ProductPreviewPlaceholder />
-                </Col>
               ))}
         </Row>
       </section>
-      {products ? <ProductsHistory /> : null}
-    </main>
+    </>
   );
 }

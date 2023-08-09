@@ -6,12 +6,12 @@ import TimeoutFallback from "./components/common/TimeoutFallback";
 import Navbar from "./components/Navbar/NavbarComp";
 import Footer from "./components/Footer";
 
-const Home = lazy(() => import("./components/pages/Home"));
-const Product = lazy(() => import("./components/pages/Product"));
+const Home = lazy(() => import("./components/pages/Home/Home"));
+const Product = lazy(() => import("./components/Product/Product"));
 const Favorites = lazy(() => import("./features/favorites/Favorites"));
 const Cart = lazy(() => import("./features/cart/Cart"));
 const ProductsInCategory = lazy(() =>
-  import("./components/pages/ProductsInCategory")
+  import("./components/Product/ProductsInCategory/ProductsInCategory")
 );
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
     <>
       <Navbar />
       <ScrollToTop />
-      <main className="py-5">
+      <main className="py-5 mb-5 px-3 px-lg-5">
         <Suspense fallback={<TimeoutFallback />}>
           <Routes>
             <Route path="/">

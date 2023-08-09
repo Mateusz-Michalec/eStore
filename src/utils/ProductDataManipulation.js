@@ -1,22 +1,16 @@
-import { store } from "../app/store";
-import { selectSizesByProductId } from "../features/sizesSlice";
-import MathUtils from "./MathUtils";
+import { usdToPLN } from "./MathUtils";
 
-function changeProductData(product) {
+export function changeProductData(product, sizes) {
   if (
     product.category === "men's clothing" ||
     product.category === "women's clothing"
   ) {
-    const sizes = store.getState().sizes;
-    product.sizes = selectSizesByProductId(sizes, product.id);
+    product.sizes = sizes[product.id];
   } else product.available = Math.floor(Math.random() * 20);
-  product.price = MathUtils.usdToPLN(product.price);
-
+  product.price = usdToPLN(product.price);
   return product;
 }
 
-function changeProductsData(products) {
+export function changeProductsData(products) {
   return products.map((product) => changeProductData(product));
 }
-
-export default { changeProductData, changeProductsData };

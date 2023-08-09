@@ -1,0 +1,7 @@
+@import "../../../assets/variables.scss";
+
+.last-viewed-placeholder {
+  &__img {
+    font-size: $dimen-img-small;
+  }
+}

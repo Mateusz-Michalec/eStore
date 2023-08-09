@@ -1,0 +1,23 @@
+@import "../../../assets/variables.scss";
+
+.product-photo {
+  cursor: pointer;
+  object-fit: contain;
+  transition: all 0.15s ease-in-out;
+
+  &--small {
+    max-height: $dimen-img-small;
+  }
+
+  &--medium {
+    max-height: $dimen-img-medium;
+  }
+
+  &--big {
+    max-height: $dimen-img-big;
+  }
+
+  &:hover {
+    transform: scale(0.92);
+  }
+}

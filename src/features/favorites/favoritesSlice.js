@@ -1,7 +1,7 @@
-import { LocalStorage } from "../../utils";
+import { getItem, saveItem } from "../../utils/LocalStorage";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = LocalStorage.getItem("favorites", []);
+const initialState = getItem("favorites", []);
 
 const favoritesSlice = createSlice({
   name: "favorties",
@@ -12,7 +12,7 @@ const favoritesSlice = createSlice({
       const productIndex = state.findIndex((favoriteId) => favoriteId === id);
       if (productIndex === -1) state.push(id);
       else state.splice(productIndex, 1);
-      LocalStorage.saveItem("favorites", state);
+      saveItem("favorites", state);
     },
   },
 });

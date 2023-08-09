@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ProductPhoto from "../../components/Product/ProductPhoto";
+import ProductPhoto from "../../components/Product/ProductPhoto/ProductPhoto";
 import { useDispatch } from "react-redux";
 import { deleteFromCart, updateQuantity } from "./cartSlice";
 
@@ -25,15 +25,15 @@ export default function CartProduct({ product }) {
   };
 
   return (
-    <Col xs={12} lg={6}>
-      <article className="shadow-sm border p-3">
-        <Row>
-          <Col xs={3}>
+    <Col xs={12}>
+      <div className="shadow-sm border p-4">
+        <Row className="g-4">
+          <Col xs={12} sm={4} md={5}>
             <ProductPhoto product={product} component={"Cart"} />
           </Col>
 
-          <Col xs={9}>
-            <section className="position-relative">
+          <Col xs={12} sm={8} md={7}>
+            <section>
               <Stack gap={2}>
                 <div className={`product-preview-title`}>
                   <Link to={`/produkty/${product.id}`}>{product.title}</Link>
@@ -85,7 +85,7 @@ export default function CartProduct({ product }) {
             </section>
           </Col>
         </Row>
-      </article>
+      </div>
     </Col>
   );
 }

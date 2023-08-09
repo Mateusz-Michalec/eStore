@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import ProductPhoto from "./ProductPhoto";
+import ProductPhoto from "./ProductPhoto/ProductPhoto";
 
 export default function ProductPreview({ product, component }) {
   return (

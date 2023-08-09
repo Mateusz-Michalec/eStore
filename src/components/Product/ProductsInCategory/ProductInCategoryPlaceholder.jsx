@@ -1,7 +1,7 @@
 import React from "react";
 import { Placeholder } from "react-bootstrap";
 
-export default function ProductPreviewPlaceholder() {
+export default function ProductInCategoryPlaceholder() {
   return (
     <div className="glow">
       <Placeholder className="w-100 opacity-25 product-preview-placeholder" />

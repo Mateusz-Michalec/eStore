@@ -1,7 +1,7 @@
-import { LocalStorage } from "../../utils";
+import { getItem, saveItem } from "../../utils/LocalStorage";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = LocalStorage.getItem("cart", []);
+const initialState = getItem("cart", []);
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -37,7 +37,7 @@ export const cartSlice = createSlice({
         };
         state[cartProductIndex] = updatedProductInCart;
       }
-      LocalStorage.saveItem("cart", state);
+      saveItem("cart", state);
     },
     updateQuantity(state, action) {
       const { id, size, quantity } = action.payload;
@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
           return { ...cartItem, quantity: quantity };
         else return cartItem;
       });
-      LocalStorage.saveItem("cart", newState);
+      saveItem("cart", newState);
       return newState;
     },
     deleteFromCart(state, action) {
@@ -54,7 +54,7 @@ export const cartSlice = createSlice({
       const newState = state.filter(
         (cartItem) => cartItem.id !== id || cartItem?.size !== size
       );
-      LocalStorage.saveItem("cart", newState);
+      saveItem("cart", newState);
       return newState;
     },
   },

@@ -32,7 +32,7 @@ export const getSizeQuantity = (state, productId, size) => {
   if (productId && size) {
     const productSizes = state.sizes[productId];
     const sizeObj = productSizes.find((s) => s[size]);
-    return sizeObj[size];
+    if (sizeObj) return sizeObj[size];
   }
 };
 

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import { images } from "../../constants";
+import { images } from "../../../constants";
 import { Link } from "react-router-dom";
 
 import {
   useGetAllProductsQuery,
-  useGetCarouselProductsQuery,
   useGetCategoriesQuery,
-} from "../../features/api/fakeStoreApi";
+} from "../../../features/api/fakeStoreApi";
 
 import {
   Button,
@@ -17,20 +16,36 @@ import {
   Collapse,
   Container,
 } from "react-bootstrap";
-import { SearchUtils } from "../../utils";
+import {
+  getMostPopularProduct,
+  getRandomNumbersArr,
+} from "../../../utils/MathUtils";
 
 export default function Home() {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [mostPopularProduct, setMostPopularProduct] = useState();
+  const [mostPopularProduct, setMostPopularProduct] = useState(null);
+  const [carouselProducts, setCarouselProducts] = useState([]);
 
   const { data: categories } = useGetCategoriesQuery();
-  const { data: allProducts } = useGetAllProductsQuery();
-  const { data: carouselProducts, isLoading: isLoadingCarousel } =
-    useGetCarouselProductsQuery();
+  const { data: allProducts, isLoading, isSuccess } = useGetAllProductsQuery();
 
   useEffect(() => {
-    setMostPopularProduct(SearchUtils.getMostPopularProduct(allProducts));
-  }, [allProducts]);
+    if (isSuccess) {
+      setMostPopularProduct(getMostPopularProduct(allProducts));
+      const randomNumbers = getRandomNumbersArr(5);
+      setCarouselProducts(
+        randomNumbers.map((n) => {
+          const product = allProducts.find((product) => product.id === n);
+          if (product)
+            return {
+              id: product.id,
+              title: product.title,
+              image: product.image,
+            };
+        })
+      );
+    }
+  }, [isSuccess]);
 
   return (
     <main className="p-4">
@@ -94,7 +109,7 @@ export default function Home() {
         <section className="mt-5">
           <h4 className="mb-4 text-sm-center">Zainspiruj się</h4>
 
-          {isLoadingCarousel ? (
+          {isLoading || carouselProducts.length === 0 ? (
             <div className="loader" />
           ) : (
             <Carousel className="mx-auto">

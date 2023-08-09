@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import ConditionalLink from "../common/ConditionalLink";
+import ConditionalLink from "../../common/ConditionalLink";
 import {
   checkIsFavorite,
   toggleFavorite,
-} from "../../features/favorites/favoritesSlice";
+} from "../../../features/favorites/favoritesSlice";
 import { useDispatch, useSelector } from "react-redux";
+import "./ProductPhoto.scss";
 
 export default function ProductPhoto({ product, component }) {
   const dispatch = useDispatch();
@@ -17,6 +18,18 @@ export default function ProductPhoto({ product, component }) {
   // Modal Img End
 
   const isFavorite = useSelector((state) => checkIsFavorite(state, product.id));
+
+  let imgClass;
+  switch (component) {
+    case "Product":
+      imgClass = "product-photo--big";
+      break;
+    case "ProductsInCategory":
+      imgClass = "product-photo--medium";
+      break;
+    default:
+      imgClass = "product-photo--small";
+  }
 
   return (
     <>
@@ -35,24 +48,19 @@ export default function ProductPhoto({ product, component }) {
       ) : null}
       <section
         className={`${
-          component !== "Cart" ? "border px-3 shadow-sm position-relative" : ""
-        } ${
-          component === "Product" || component === "Cart"
-            ? "d-flex align-items-center justify-content-center h-100"
-            : ""
-        }`}
+          component !== "Cart"
+            ? "border shadow-sm"
+            : "d-flex align-items-center justify-content-center h-100"
+        } 
+        `}
       >
         <ConditionalLink
           path={`/products/${product.id}`}
           condition={component !== "Product"}
           children={
             <img
-              className={`w-100 ${
-                component === "Cart" ? "my-0 product-cart-img" : "my-5 "
-              }
-            ${
-              component !== "Product" ? "product-preview-img" : "px-4"
-            }  img-contain cursor-pointer zoom-out`}
+              className={`product-photo ${imgClass} mx-auto my-4 d-block 
+                `}
               src={product.image}
               alt={product.title}
               onClick={component === "Product" ? handleShowModalImg : null}
@@ -61,7 +69,7 @@ export default function ProductPhoto({ product, component }) {
         />
         {component !== "Cart" ? (
           <button
-            className="position-absolute top-right"
+            className="position-absolute top-0 end-0 p-3"
             onClick={() => dispatch(toggleFavorite(product.id))}
           >
             <i

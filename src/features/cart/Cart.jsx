@@ -6,7 +6,7 @@ import { Button, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { getCartItemsCount, selectCartItems } from "./cartSlice";
 import { useGetAllProductsQuery } from "../api/fakeStoreApi";
-import CartProductPlaceholder from "./CartProductPlaceholder";
+import CartProductPlaceholder from "./CartProductPlaceholder/CartProductPlaceholder";
 
 export default function Cart() {
   const cart = useSelector(selectCartItems);
@@ -40,7 +40,7 @@ export default function Cart() {
     <>
       <Empty arrayLength={cartLength} title="Koszyk jest pusty" />
       <Container>
-        <PageHeader array={cart} title="Koszyk" />
+        <PageHeader arrayLength={cartLength} title="Koszyk" />
         <section>
           <Row className="g-4">
             {isLoading

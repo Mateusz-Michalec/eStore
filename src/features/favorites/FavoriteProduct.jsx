@@ -1,30 +1,42 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
 import Sizes from "../../components/Product/Sizes";
 import ProductPreview from "../../components/Product/ProductPreview";
-import CartContext from "../../context/CartContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../cart/cartSlice";
+import { getSizeQuantity } from "../sizesSlice";
 
 export default function FavoriteProduct({ product, component }) {
-  const { addToCart } = useContext(CartContext);
+  const dispatch = useDispatch();
+
   const [selectedSize, setSelectedSize] = useState(
     product.sizes ? "Wybierz rozmiar" : null
   );
 
-  console.log(product);
+  const sizeQuantity = useSelector((state) =>
+    getSizeQuantity(state, product.id, selectedSize)
+  );
 
   function handleAddToCart() {
     if (
       selectedSize !== "Wybierz rozmiar" &&
       selectedSize !== "Wybierz rozmiar!"
     )
-      if (product.sizes) addToCart({ ...product, size: selectedSize });
-      else addToCart(product);
+      dispatch(
+        addToCart({
+          id: product.id,
+          size: selectedSize,
+          sizeQuantity: sizeQuantity,
+        })
+      );
+    else if (selectedSize === null)
+      dispatch(addToCart({ id: product.id, available: product.available }));
     else setSelectedSize("Wybierz rozmiar!");
   }
 
   return (
     <Col xs={12} md={6} xl={4} xxl={3}>
-      <article className="product-preview h-100">
+      <article className="product-preview">
         <ProductPreview product={product} component={component} />
         <Stack
           direction="horizontal"

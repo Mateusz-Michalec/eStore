@@ -1,0 +1,7 @@
+@import "../../../assets/variables.scss";
+
+.cart-product-placeholder {
+  &__photo {
+    font-size: $dimen-img-small;
+  }
+}
