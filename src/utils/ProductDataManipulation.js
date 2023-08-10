@@ -1,14 +1,15 @@
 import { usdToPLN } from "./MathUtils";
 
 export function changeProductData(product, sizes) {
-  if (
-    product.category === "men's clothing" ||
-    product.category === "women's clothing"
-  ) {
-    product.sizes = sizes[product.id];
-  } else product.available = Math.floor(Math.random() * 20);
-  product.price = usdToPLN(product.price);
-  return product;
+  const conditionalProperty = sizes
+    ? { sizes: sizes }
+    : { available: Math.floor(Math.random() * 20) };
+
+  return {
+    ...product,
+    price: usdToPLN(product.price),
+    ...conditionalProperty,
+  };
 }
 
 export function changeProductsData(products) {

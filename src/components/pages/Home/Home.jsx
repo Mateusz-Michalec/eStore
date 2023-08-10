@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { images } from "../../../constants";
 import { Link } from "react-router-dom";
+import "./Home.scss";
 
 import {
   useGetAllProductsQuery,
@@ -48,7 +49,7 @@ export default function Home() {
   }, [isSuccess]);
 
   return (
-    <main className="p-4">
+    <>
       <Container>
         <Link to="/club" className="text-center mb-4 d-block">
           Chcesz 10% rabatu i bezpłatne dostawy?
@@ -58,11 +59,15 @@ export default function Home() {
 
         <div className="position-relative p-0">
           <Link to="/products/category/jewelery">
-            <div className="hero-body position-absolute w-100 text-center text-main">
+            <div className="hero-body position-absolute top-25 w-100 text-center text-main">
               <h2 className="mb-1">Przygotuj się na lato</h2>
               <p className="mb-5">Modne dodatki w atrakcyjnych cenach.</p>
             </div>
-            <img src={images.hero} className="w-100 hero-img" alt="Plaża" />
+            <img
+              src={images.hero}
+              className="w-100 home__hero-img"
+              alt="Plaża"
+            />
           </Link>
         </div>
 
@@ -94,7 +99,7 @@ export default function Home() {
               {categories?.map((category) => (
                 <Row key={`${category}-home`}>
                   <Link to={`/products/category/${category}`}>
-                    <Col className="d-flex category-col p-3 justify-content-between align-items-center">
+                    <Col className="d-flex home__category-col p-3 justify-content-between align-items-center">
                       <span className="m-0 d-inline-block">{category}</span>
                       <button type="button">
                         <i className="bi bi-chevron-right fs-5"></i>
@@ -107,17 +112,17 @@ export default function Home() {
           </Collapse>
         </section>
         <section className="mt-5">
-          <h4 className="mb-4 text-sm-center">Zainspiruj się</h4>
+          <h4 className="mb-5 text-center ">Zainspiruj się</h4>
 
-          {isLoading || carouselProducts.length === 0 ? (
+          {isLoading ? (
             <div className="loader" />
-          ) : (
+          ) : carouselProducts.length > 0 ? (
             <Carousel className="mx-auto">
               {carouselProducts.map((product) => (
                 <Carousel.Item key={product.id}>
                   <Link to={`/products/${product.id}`}>
                     <img
-                      className="d-block vh-30 w-100 img-contain"
+                      className="d-block w-100 img-contain home__carousel-item"
                       src={product.image}
                       alt={product.title}
                     />
@@ -128,7 +133,7 @@ export default function Home() {
                 </Carousel.Item>
               ))}
             </Carousel>
-          )}
+          ) : null}
         </section>
         <section className="section-2-bg text-white p-4 text-center mt-5">
           <h3 className="ls-2 ">Newsletter</h3>
@@ -148,7 +153,7 @@ export default function Home() {
           <section className="mt-5 mb-4 border border-2 p-4">
             <Link to={`/products/${mostPopularProduct?.id}`}>
               <img
-                className="d-block mx-auto vh-30 img-contain"
+                className="d-block mx-auto home__carousel-item img-contain"
                 src={mostPopularProduct.image}
                 alt={mostPopularProduct.title}
               />
@@ -159,6 +164,6 @@ export default function Home() {
           <div className="loader"></div>
         )}
       </Container>
-    </main>
+    </>
   );
 }

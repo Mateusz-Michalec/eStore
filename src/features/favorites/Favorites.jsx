@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row } from "react-bootstrap";
 import FavoriteProduct from "./FavoriteProduct";
-import PageHeader from "../../components/common/PageHeader";
+import PageHeader from "../../components/common/PageHeader/PageHeader";
 import Empty from "../../components/common/Empty";
 import FavoriteProductPlaceholder from "./FavoriteProductPlaceholder/FavoriteProductPlaceholder";
 import { useSelector } from "react-redux";

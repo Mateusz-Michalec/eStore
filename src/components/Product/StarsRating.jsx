@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { MathUtils } from "../../utils";
+import { roundHalf } from "../../utils/MathUtils";
 import { Stack } from "react-bootstrap";
 
 export default function StarsRating({ ratingRate, ratingCount }) {
   function createStarElements() {
     const stars = [];
-    let rating = MathUtils.roundHalf(ratingRate);
+    let rating = roundHalf(ratingRate);
     const isHalf = rating % 2 !== 0;
     if (isHalf) rating = rating - 0.5;
     let icon;

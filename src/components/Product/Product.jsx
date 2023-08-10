@@ -19,12 +19,28 @@ import LastViewed from "../../features/lastViewed/LastViewed";
 import { useGetProductQuery } from "../../features/api/fakeStoreApi";
 import { addToCart } from "../../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getSizeQuantity } from "../../features/sizesSlice";
+import {
+  getSizeQuantity,
+  selectSizesByProductId,
+} from "../../features/sizesSlice";
+import { changeProductData } from "../../utils/ProductDataManipulation";
 
 export default function Product() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Sizes
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const productSizes = useSelector((state) =>
+    selectSizesByProductId(state, id)
+  );
+
+  const sizeQuantity = useSelector((state) =>
+    getSizeQuantity(state, id, selectedSize)
+  );
+  // Sizes End
 
   const {
     data: product,
@@ -33,24 +49,13 @@ export default function Product() {
     isSuccess,
   } = useGetProductQuery(id);
 
+  const [transformedProduct, setTransformedProduct] = useState(null);
+
   useEffect(() => {
     if (isError) navigate("/");
-  }, [isError]);
-
-  // Sizes
-  const [isLowSizes, setIsLowSizes] = useState();
-  const [selectedSize, setSelectedSize] = useState("");
-  const [isSizeSelected, setIsSizeSelected] = useState();
-
-  function handleSizeSelect(e) {
-    setSelectedSize(e.currentTarget.id);
-    setIsSizeSelected(true);
-  }
-  // Sizes End
-
-  const sizeQuantity = useSelector((state) =>
-    getSizeQuantity(state, product?.id, selectedSize)
-  );
+    if (isSuccess)
+      setTransformedProduct(changeProductData(product, productSizes));
+  }, [isLoading]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
@@ -59,28 +64,28 @@ export default function Product() {
   // AddToCart Btn intersecting end
 
   function handleAddToCart() {
-    if (product.sizes) {
+    if (transformedProduct.sizes) {
       if (selectedSize) {
-        setIsSizeSelected(true);
         dispatch(
           addToCart({
-            id: product.id,
+            id: transformedProduct.id,
             size: selectedSize,
             sizeQuantity: sizeQuantity,
           })
         );
-      } else {
-        window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
-        setIsSizeSelected(false);
-      }
-    } else {
-      dispatch(addToCart({ id: product.id, available: product.available }));
-    }
+      } else window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
+    } else
+      dispatch(
+        addToCart({
+          id: transformedProduct.id,
+          available: transformedProduct.available,
+        })
+      );
   }
 
   return (
-    <main className="my-5 px-3 px-lg-5">
-      {product ? (
+    <>
+      {transformedProduct ? (
         <>
           <article className="d-flex flex-column mb-4">
             <Breadcrumb className="fs-7 d-flex justify-content-center mb-4">
@@ -89,65 +94,52 @@ export default function Product() {
               </Breadcrumb.Item>
               <Breadcrumb.Item
                 linkAs={Link}
-                linkProps={{ to: `/products/category/${product.category}` }}
+                linkProps={{
+                  to: `/products/category/${transformedProduct.category}`,
+                }}
               >
-                {product.category}
+                {transformedProduct.category}
               </Breadcrumb.Item>
-              <Breadcrumb.Item active>{product.title}</Breadcrumb.Item>
+              <Breadcrumb.Item active>
+                {transformedProduct.title}
+              </Breadcrumb.Item>
             </Breadcrumb>
             <Container>
               <Row className="gap-3">
                 <Col sm={12} md={6}>
-                  <ProductPhoto product={product} component="Product" />
+                  <ProductPhoto
+                    product={transformedProduct}
+                    component="Product"
+                  />
                 </Col>
                 <Col>
                   <section>
-                    <h1 className="h4 mb-1">{product.title}</h1>
-                    <h2 className="h5 mb-0 text-danger">{product.price} PLN</h2>
+                    <h1 className="h4 mb-1">{transformedProduct.title}</h1>
+                    <h2 className="h5 mb-0 text-danger">
+                      {transformedProduct.price} PLN
+                    </h2>
                   </section>
                   <StarsRating
-                    ratingRate={product.rating.rate}
-                    ratingCount={product.rating.count}
+                    ratingRate={transformedProduct.rating.rate}
+                    ratingCount={transformedProduct.rating.count}
                   />
-                  {product.sizes ? (
+                  {transformedProduct.sizes ? (
                     <section ref={sizesRef}>
-                      <Stack direction="horizontal" className="mb-2">
-                        <Stack>
-                          <span>Rozmiary</span>
-                          {isSizeSelected === false ? (
-                            <span className="text-danger">Wybierz rozmiar</span>
-                          ) : null}
-                        </Stack>
-                        {isLowSizes ? (
-                          <Stack
-                            direction="horizontal"
-                            className="ms-auto fs-7"
-                          >
-                            <i className="bi bi-circle-fill text-danger me-1 fs-8"></i>{" "}
-                            <span>Zostało tylko kilka sztuk!</span>
-                          </Stack>
-                        ) : null}
-                      </Stack>
-                      <Stack
-                        direction="horizontal"
-                        className="flex-wrap"
-                        gap={3}
-                      >
-                        <Sizes
-                          component="Product"
-                          sizes={product.sizes}
-                          setIsLowSizes={() => setIsLowSizes(true)}
-                          selectedSize={selectedSize}
-                          handleSizeSelect={(e) => handleSizeSelect(e)}
-                        />
-                      </Stack>
+                      <Sizes
+                        component="Product"
+                        sizes={transformedProduct.sizes}
+                        selectedSize={selectedSize}
+                        handleSizeSelect={(e) =>
+                          setSelectedSize(e.currentTarget.id)
+                        }
+                      />
                     </section>
                   ) : null}
 
                   {!isIntersectingSizes ? (
                     <div className="fixed-bottom fixed-btn d-md-none px-4 py-3 bg-white border-1 border-top shadow">
                       <Button
-                        variant={isSizeSelected ? "dark" : "secondary"}
+                        variant={!selectedSize ? "dark" : "secondary"}
                         ref={addToCartRef}
                         className="rounded-0 py-3 w-100"
                         onClick={() => handleAddToCart()}
@@ -158,7 +150,7 @@ export default function Product() {
                     </div>
                   ) : null}
                   <Button
-                    variant={isSizeSelected ? "dark" : "secondary"}
+                    variant={!selectedSize ? "dark" : "secondary"}
                     ref={addToCartRef}
                     className="rounded-0 py-3 mt-3 w-100"
                     onClick={() => handleAddToCart()}
@@ -168,17 +160,19 @@ export default function Product() {
                   </Button>
                   <section className="mt-4 ls-1">
                     <h3 className="h5">Opis</h3>
-                    <p className=" text-secondary">{product.description}</p>
+                    <p className=" text-secondary">
+                      {transformedProduct.description}
+                    </p>
                   </section>
                 </Col>
               </Row>
             </Container>
           </article>
-          {isSuccess ? <LastViewed productId={product.id} /> : null}
+          {isSuccess ? <LastViewed productId={transformedProduct.id} /> : null}
         </>
       ) : (
         <div className="loader" />
       )}
-    </main>
+    </>
   );
 }

@@ -1,25 +1,25 @@
 @import "node_modules/bootstrap/scss/bootstrap";
+@import "./assets/variables.scss";
 
 // Colors
-
 .text-main {
-  color: #003467;
+  color: $color-primary;
 }
 
 .main-bg {
-  background: #003467;
+  background: $color-primary;
 }
 
 .section-1-bg {
-  background: #f7ebde;
+  background: $color-cream;
 }
 
 .section-2-bg {
-  background: #757f9a;
+  background: $color-grey;
 }
 
 .footer-bg {
-  background: #dedede;
+  background: $color-cream-dark;
 }
 
 // General
@@ -67,30 +67,12 @@ a {
   }
 }
 
-// Home
-
-.hero-img {
-  height: 50vh;
-  object-fit: cover;
-}
-
-.hero-body {
-  top: 12%;
-  left: 50%;
-  transform: translate(-50%, 0);
-}
-
 // Boottrap overwriting
 
 @media screen and (max-width: 992px) {
   .nav-link:hover {
     box-shadow: $box-shadow;
   }
-}
-
-.category-col:hover {
-  box-shadow: $box-shadow;
-  background: white;
 }
 
 .nav-icon,

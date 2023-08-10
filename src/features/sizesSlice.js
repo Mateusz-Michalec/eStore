@@ -26,7 +26,7 @@ const sizesSlice = createSlice({
 });
 
 export const selectSizesByProductId = (state, productId) =>
-  state[Number(productId)];
+  state.sizes[Number(productId)];
 
 export const getSizeQuantity = (state, productId, size) => {
   if (productId && size) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PageHeader from "../../components/common/PageHeader";
+import PageHeader from "../../components/common/PageHeader/PageHeader";
 import CartProduct from "./CartProduct";
 import Empty from "../../components/common/Empty";
 import { Button, Container, Row } from "react-bootstrap";

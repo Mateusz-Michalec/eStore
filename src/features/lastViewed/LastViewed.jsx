@@ -15,8 +15,6 @@ export const LastViewed = ({ productId }) => {
 
   const [lastViewedItems, setLastViewedItems] = useState([]);
 
-  console.log(lastViewedItems);
-
   useEffect(() => {
     dispatch(addLastViewed({ id: productId }));
   }, []);
@@ -44,8 +42,8 @@ export const LastViewed = ({ productId }) => {
     if (isLoading)
       return (
         <Row className="flex-nowrap my-5 py-5" style={{ overflowX: "auto" }}>
-          {lastViewed.map((product) => (
-            <LastViewedPlaceholder key={`p_${product.id}`} />
+          {lastViewed.map((lastViewedId) => (
+            <LastViewedPlaceholder key={lastViewedId} />
           ))}
         </Row>
       );
@@ -55,7 +53,7 @@ export const LastViewed = ({ productId }) => {
           <h5 className="mb-3">Ostatnio oglądane</h5>
           <Row className="flex-nowrap" style={{ overflowX: "auto" }}>
             {lastViewedItems.map((product) => (
-              <Col xs={8} sm={6} md={5} lg={3} xl={2} key={`lv_${product.id}`}>
+              <Col xs={8} sm={6} md={5} lg={3} xl={2} key={product.id}>
                 <ProductPreview
                   product={product}
                   component={"ProductsHistory"}
