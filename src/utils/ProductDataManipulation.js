@@ -1,8 +1,8 @@
 import { usdToPLN } from "./MathUtils";
 
-export function changeProductData(product, sizes) {
-  const conditionalProperty = sizes
-    ? { sizes: sizes }
+export function changeProductData(product, productSizes) {
+  const conditionalProperty = productSizes
+    ? { sizes: productSizes }
     : { available: Math.floor(Math.random() * 20) };
 
   return {
@@ -12,6 +12,6 @@ export function changeProductData(product, sizes) {
   };
 }
 
-export function changeProductsData(products) {
-  return products.map((product) => changeProductData(product));
+export function changeProductsData(products, sizes) {
+  return products.map((product) => changeProductData(product, sizes));
 }

@@ -7,11 +7,11 @@ import Navbar from "./components/Navbar/NavbarComp";
 import Footer from "./components/Footer";
 
 const Home = lazy(() => import("./components/pages/Home/Home"));
-const Product = lazy(() => import("./components/Product/Product"));
+const Product = lazy(() => import("./features/product/Product"));
 const Favorites = lazy(() => import("./features/favorites/Favorites"));
 const Cart = lazy(() => import("./features/cart/Cart"));
 const ProductsInCategory = lazy(() =>
-  import("./components/Product/ProductsInCategory/ProductsInCategory")
+  import("./features/product/ProductsInCategory/ProductsInCategory")
 );
 
 function App() {

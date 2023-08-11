@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Row, Col } from "react-bootstrap";
-import ProductPreview from "../../components/Product/ProductPreview";
+import ProductPreview from "../product/ProductPreview";
 import LastViewedPlaceholder from "./LastViewedPlaceholder/LastViewedPlaceholder";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

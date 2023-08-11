@@ -35,15 +35,17 @@ export default function Home() {
       setMostPopularProduct(getMostPopularProduct(allProducts));
       const randomNumbers = getRandomNumbersArr(5);
       setCarouselProducts(
-        randomNumbers.map((n) => {
-          const product = allProducts.find((product) => product.id === n);
-          if (product)
-            return {
-              id: product.id,
-              title: product.title,
-              image: product.image,
-            };
-        })
+        randomNumbers
+          .map((n) => {
+            const product = allProducts.find((product) => product.id === n);
+            if (product)
+              return {
+                id: product.id,
+                title: product.title,
+                image: product.image,
+              };
+          })
+          .filter(Boolean) // This filters out any undefined values
       );
     }
   }, [isSuccess]);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import ConditionalLink from "../../common/ConditionalLink";
+import ConditionalLink from "../../../components/common/ConditionalLink";
 import {
   checkIsFavorite,
   toggleFavorite,

@@ -1,4 +1,4 @@
-import sizesSlice from "../features/sizesSlice";
+import sizesSlice from "../features/sizes/sizesSlice";
 import favoritesSlice from "../features/favorites/favoritesSlice";
 import cartSlice from "../features/cart/cartSlice";
 import lastViewedSlice from "../features/lastViewed/lastViewedSlice";

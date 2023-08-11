@@ -1,27 +1,22 @@
 import React, { useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
-import Sizes from "../../components/Product/Sizes";
+import Sizes from "../sizes/Sizes";
 import ProductPreview from "../../components/Product/ProductPreview";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/cartSlice";
-import { getSizeQuantity } from "../sizesSlice";
+import { getSizeQuantity } from "../sizes/sizesSlice";
 
 export default function FavoriteProduct({ product, component }) {
   const dispatch = useDispatch();
 
-  const [selectedSize, setSelectedSize] = useState(
-    product.sizes ? "Wybierz rozmiar" : null
-  );
+  const [selectedSize, setSelectedSize] = useState(product.sizes ? "" : null);
 
   const sizeQuantity = useSelector((state) =>
     getSizeQuantity(state, product.id, selectedSize)
   );
 
   function handleAddToCart() {
-    if (
-      selectedSize !== "Wybierz rozmiar" &&
-      selectedSize !== "Wybierz rozmiar!"
-    )
+    if (selectedSize !== "Wybierz rozmiar")
       dispatch(
         addToCart({
           id: product.id,
@@ -31,7 +26,7 @@ export default function FavoriteProduct({ product, component }) {
       );
     else if (selectedSize === null)
       dispatch(addToCart({ id: product.id, available: product.available }));
-    else setSelectedSize("Wybierz rozmiar!");
+    else setSelectedSize("Wybierz rozmiar");
   }
 
   return (

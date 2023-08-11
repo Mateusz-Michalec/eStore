@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -11,18 +11,15 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useInView from "../../hooks/useInView";
-import Sizes from "./Sizes";
+import Sizes from "../sizes/Sizes";
 import StarsRating from "./StarsRating";
 import ProductPhoto from "./ProductPhoto/ProductPhoto";
-import LastViewed from "../../features/lastViewed/LastViewed";
+import LastViewed from "../lastViewed/LastViewed";
 
-import { useGetProductQuery } from "../../features/api/fakeStoreApi";
-import { addToCart } from "../../features/cart/cartSlice";
+import { useGetProductQuery } from "../api/fakeStoreApi";
+import { addToCart } from "../cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getSizeQuantity,
-  selectSizesByProductId,
-} from "../../features/sizesSlice";
+import { getSizeQuantity, selectSizesByProductId } from "../sizes/sizesSlice";
 import { changeProductData } from "../../utils/ProductDataManipulation";
 
 export default function Product() {
@@ -55,7 +52,7 @@ export default function Product() {
     if (isError) navigate("/");
     if (isSuccess)
       setTransformedProduct(changeProductData(product, productSizes));
-  }, [isLoading]);
+  }, [isError, isSuccess]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
