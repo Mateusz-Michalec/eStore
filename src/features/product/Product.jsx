@@ -44,7 +44,13 @@ export default function Product() {
     isLoading,
     isError,
     isSuccess,
+    isFetching,
+    refetch,
   } = useGetProductQuery(id);
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
 
   const [transformedProduct, setTransformedProduct] = useState(null);
 
@@ -52,7 +58,7 @@ export default function Product() {
     if (isError) navigate("/");
     if (isSuccess)
       setTransformedProduct(changeProductData(product, productSizes));
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, id]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
@@ -62,7 +68,7 @@ export default function Product() {
 
   function handleAddToCart() {
     if (transformedProduct.sizes) {
-      if (selectedSize) {
+      if (selectedSize && selectedSize !== "Wybierz rozmiar") {
         dispatch(
           addToCart({
             id: transformedProduct.id,
@@ -70,7 +76,10 @@ export default function Product() {
             sizeQuantity: sizeQuantity,
           })
         );
-      } else window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
+      } else {
+        setSelectedSize("Wybierz rozmiar");
+        window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
+      }
     } else
       dispatch(
         addToCart({
@@ -82,7 +91,9 @@ export default function Product() {
 
   return (
     <>
-      {transformedProduct ? (
+      {isLoading || isFetching || !transformedProduct ? (
+        <div className="loader" />
+      ) : (
         <>
           <article className="d-flex flex-column mb-4">
             <Breadcrumb className="fs-7 d-flex justify-content-center mb-4">
@@ -167,8 +178,6 @@ export default function Product() {
           </article>
           {isSuccess ? <LastViewed productId={transformedProduct.id} /> : null}
         </>
-      ) : (
-        <div className="loader" />
       )}
     </>
   );

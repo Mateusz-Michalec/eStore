@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Row, Col, Stack, Dropdown } from "react-bootstrap";
 import ProductPreviewPlaceholder from "./ProductInCategoryPlaceholder";
 import ProductPreview from "../ProductPreview";
-import PageHeader from "../../common/PageHeader/PageHeader";
+import PageHeader from "../../../components/common/PageHeader/PageHeader";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { useGetProductsByCategoryQuery } from "../../../features/api/fakeStoreApi";
@@ -20,8 +20,11 @@ export default function ProductsInCategory() {
     isLoading,
     isError,
     isSuccess,
+    isFetching,
     refetch,
   } = useGetProductsByCategoryQuery({ categoryId: id, sortValue });
+
+  console.log(isLoading);
 
   const [displayedProducts, setDisplayedProducts] = useState([]);
 
@@ -88,7 +91,7 @@ export default function ProductsInCategory() {
       )}
       <section>
         <Row className="g-5">
-          {isLoading
+          {isLoading || isFetching
             ? [...Array(6)].map((x, i) => (
                 <Col xs={12} md={6} xl={4} xxl={3} key={i}>
                   <ProductPreviewPlaceholder />

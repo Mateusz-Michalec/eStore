@@ -11,7 +11,3 @@ export function changeProductData(product, productSizes) {
     ...conditionalProperty,
   };
 }
-
-export function changeProductsData(products, sizes) {
-  return products.map((product) => changeProductData(product, sizes));
-}

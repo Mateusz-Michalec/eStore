@@ -38,30 +38,36 @@ export default function Cart() {
 
   return (
     <>
-      <Empty arrayLength={cartLength} title="Koszyk jest pusty" />
-      <Container>
-        <PageHeader arrayLength={cartLength} title="Koszyk" />
-        <section>
-          <Row className="g-4">
-            {isLoading
-              ? cart.map((item, i) => (
-                  <CartProductPlaceholder key={`${item.id}_${i}`} />
-                ))
-              : cartItems?.map((product) => (
-                  <CartProduct
-                    key={`${product.id}_${product.size}`}
-                    product={product}
-                  />
-                ))}
-          </Row>
-        </section>
-        <section className="mt-4 text-main">
-          <h5>Razem: {getTotalValue()} PLN</h5>
-          <Button variant="dark" className="mt-2 text-uppercase py-2 px-4 ls-1">
-            Przejdź do kasy
-          </Button>
-        </section>
-      </Container>
+      {cartLength === 0 ? (
+        <Empty arrayLength={cartLength} title="Koszyk jest pusty" />
+      ) : (
+        <Container>
+          <PageHeader arrayLength={cartLength} title="Koszyk" />
+          <section>
+            <Row className="g-4">
+              {isLoading
+                ? cart.map((item, i) => (
+                    <CartProductPlaceholder key={`${item.id}_${i}`} />
+                  ))
+                : cartItems?.map((product) => (
+                    <CartProduct
+                      key={`${product.id}_${product.size}`}
+                      product={product}
+                    />
+                  ))}
+            </Row>
+          </section>
+          <section className="mt-4 text-main">
+            <h5>Razem: {getTotalValue()} PLN</h5>
+            <Button
+              variant="dark"
+              className="mt-2 text-uppercase py-2 px-4 ls-1"
+            >
+              Przejdź do kasy
+            </Button>
+          </section>
+        </Container>
+      )}
     </>
   );
 }

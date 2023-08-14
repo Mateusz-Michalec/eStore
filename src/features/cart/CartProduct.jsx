@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ProductPhoto from "../../components/Product/ProductPhoto/ProductPhoto";
+import ProductPhoto from "../product/ProductPhoto/ProductPhoto";
 import { useDispatch } from "react-redux";
 import { deleteFromCart, updateQuantity } from "./cartSlice";
 

@@ -7,6 +7,8 @@ import FavoriteProductPlaceholder from "./FavoriteProductPlaceholder/FavoritePro
 import { useSelector } from "react-redux";
 import { getFavoritesCount, selectFavorites } from "./favoritesSlice";
 import { useGetAllProductsQuery } from "../api/fakeStoreApi";
+import { selectSizes } from "../sizes/sizesSlice";
+import { changeProductData } from "../../utils/ProductDataManipulation";
 
 export default function Favorites() {
   const favorites = useSelector(selectFavorites);
@@ -14,17 +16,20 @@ export default function Favorites() {
 
   const { data: allProducts, isLoading, isSuccess } = useGetAllProductsQuery();
 
+  const sizes = useSelector(selectSizes);
+
   const [favoritesItems, setFavoritesItems] = useState([]);
 
   const filterAllProducts = () => {
-    return favorites.map((favoriteId) =>
-      allProducts?.find((product) => product.id === favoriteId)
-    );
+    return favorites.map((favoriteId) => {
+      const product = allProducts?.find((product) => product.id === favoriteId);
+      if (product) return changeProductData(product, sizes[product.id]);
+    });
   };
 
   useEffect(() => {
     if (isSuccess) setFavoritesItems(filterAllProducts);
-  }, [isLoading, favorites]);
+  }, [isSuccess, favorites]);
 
   return (
     <>

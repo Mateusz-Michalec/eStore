@@ -34,9 +34,10 @@ export const LastViewed = ({ productId }) => {
                 };
             })
           )
+          .filter(Boolean)
       );
     }
-  }, [isLoading]);
+  }, [isSuccess]);
 
   if (lastViewed.length > 0)
     if (isLoading)
@@ -51,7 +52,7 @@ export const LastViewed = ({ productId }) => {
       return (
         <section className="my-5 py-5">
           <h5 className="mb-3">Ostatnio oglądane</h5>
-          <Row className="flex-nowrap" style={{ overflowX: "auto" }}>
+          <Row className="flex-nowrap">
             {lastViewedItems.map((product) => (
               <Col xs={8} sm={6} md={5} lg={3} xl={2} key={product.id}>
                 <ProductPreview

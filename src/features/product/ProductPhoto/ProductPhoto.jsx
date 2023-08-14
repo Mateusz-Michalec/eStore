@@ -47,10 +47,10 @@ export default function ProductPhoto({ product, component }) {
         </Modal>
       ) : null}
       <section
-        className={`${
-          component !== "Cart"
-            ? "border shadow-sm"
-            : "d-flex align-items-center justify-content-center h-100"
+        className={` ${
+          component === "Cart"
+            ? ""
+            : "border shadow-sm d-flex position-relative align-items-center justify-content-center h-100"
         } 
         `}
       >
@@ -69,7 +69,7 @@ export default function ProductPhoto({ product, component }) {
         />
         {component !== "Cart" ? (
           <button
-            className="position-absolute top-0 end-0 p-3"
+            className="position-absolute top-0 end-0 py-3 px-4"
             onClick={() => dispatch(toggleFavorite(product.id))}
           >
             <i

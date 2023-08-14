@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
 import Sizes from "../sizes/Sizes";
-import ProductPreview from "../../components/Product/ProductPreview";
+import ProductPreview from "../product/ProductPreview";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/cartSlice";
 import { getSizeQuantity } from "../sizes/sizesSlice";
@@ -16,7 +16,7 @@ export default function FavoriteProduct({ product, component }) {
   );
 
   function handleAddToCart() {
-    if (selectedSize !== "Wybierz rozmiar")
+    if (selectedSize !== "Wybierz rozmiar" && selectedSize)
       dispatch(
         addToCart({
           id: product.id,
@@ -48,11 +48,9 @@ export default function FavoriteProduct({ product, component }) {
           ) : null}
           <Button
             variant={
-              product.sizes
-                ? selectedSize === "Wybierz rozmiar" ||
-                  selectedSize === "Wybierz rozmiar!"
-                  ? "secondary"
-                  : "dark"
+              (selectedSize === "Wybierz rozmiar" && product.sizes) ||
+              (selectedSize === "" && product.sizes)
+                ? "secondary"
                 : "dark"
             }
             className="py-2 rounded-0 w-50"
