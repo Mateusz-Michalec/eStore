@@ -5,6 +5,7 @@ import ProductPreview from "../product/ProductPreview";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/cartSlice";
 import { getSizeQuantity } from "../sizes/sizesSlice";
+import { showAlert } from "../alert/alertSlice";
 
 export default function FavoriteProduct({ product, component }) {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function FavoriteProduct({ product, component }) {
   );
 
   function handleAddToCart() {
-    if (selectedSize !== "Wybierz rozmiar" && selectedSize)
+    if (selectedSize !== "Wybierz rozmiar" && selectedSize) {
       dispatch(
         addToCart({
           id: product.id,
@@ -24,9 +25,11 @@ export default function FavoriteProduct({ product, component }) {
           sizeQuantity: sizeQuantity,
         })
       );
-    else if (selectedSize === null)
+      dispatch(showAlert("Produkt dodany do koszyka!", "cart"));
+    } else if (selectedSize === null) {
       dispatch(addToCart({ id: product.id, available: product.available }));
-    else setSelectedSize("Wybierz rozmiar");
+      dispatch(showAlert("Produkt dodany do koszyka!", "cart"));
+    } else setSelectedSize("Wybierz rozmiar");
   }
 
   return (

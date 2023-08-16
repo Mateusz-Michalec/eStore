@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useInView(ref, data) {
-  const [isIntersecting, setIsIntersecting] = useState();
+  const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -12,7 +12,7 @@ export default function useInView(ref, data) {
     if (ref.current) observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [ref, data]);
+  }, [data, ref]);
 
   return isIntersecting;
 }

@@ -42,11 +42,14 @@ export const LastViewed = ({ productId }) => {
   if (lastViewed.length > 0)
     if (isLoading)
       return (
-        <Row className="flex-nowrap my-5 py-5" style={{ overflowX: "auto" }}>
-          {lastViewed.map((lastViewedId) => (
-            <LastViewedPlaceholder key={lastViewedId} />
-          ))}
-        </Row>
+        <>
+          <h5 className="mb-3">Ostatnio oglądane</h5>
+          <Row className="flex-nowrap my-5 py-5" style={{ overflowX: "auto" }}>
+            {lastViewed.map((lastViewedId) => (
+              <LastViewedPlaceholder key={lastViewedId} />
+            ))}
+          </Row>
+        </>
       );
     else if (isSuccess && lastViewedItems.length > 0)
       return (

@@ -5,6 +5,7 @@ import { Stack, Nav, Navbar } from "react-bootstrap";
 import Badge from "./Badge";
 import { images } from "../../constants";
 import Search from "./Search";
+import TimeoutAlert from "./TimeoutAlert";
 import { useGetCategoriesQuery } from "../../features/api/fakeStoreApi";
 import { useSelector } from "react-redux";
 import { getFavoritesCount } from "../../features/favorites/favoritesSlice";
@@ -49,7 +50,7 @@ export default function NavbarComp() {
           isLoading ? "glow" : ""
         } shadow-sm border-bottom px-4 px-lg-5 py-2 flex-wrap`}
       >
-        {/* <TimeoutAlert /> */}
+        <TimeoutAlert />
         {categories ? (
           <Navbar.Toggle
             ref={hamburger}

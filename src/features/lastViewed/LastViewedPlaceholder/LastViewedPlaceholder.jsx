@@ -12,7 +12,6 @@ const lastViewedPlaceholder = () => {
       lg={3}
       xl={2}
     >
-      <h5 className="mb-3">Ostatnio oglądane</h5>
       <Placeholder
         bg="secondary"
         xs={12}

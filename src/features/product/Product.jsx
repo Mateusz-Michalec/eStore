@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import {
   Breadcrumb,
@@ -21,11 +21,11 @@ import { addToCart } from "../cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSizeQuantity, selectSizesByProductId } from "../sizes/sizesSlice";
 import { changeProductData } from "../../utils/ProductDataManipulation";
+import { showAlert } from "../alert/alertSlice";
 
 export default function Product() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const navigate = useNavigate();
 
   // Sizes
   const [selectedSize, setSelectedSize] = useState("");
@@ -42,7 +42,6 @@ export default function Product() {
   const {
     data: product,
     isLoading,
-    isError,
     isSuccess,
     isFetching,
     refetch,
@@ -55,15 +54,14 @@ export default function Product() {
   const [transformedProduct, setTransformedProduct] = useState(null);
 
   useEffect(() => {
-    if (isError) navigate("/");
     if (isSuccess)
       setTransformedProduct(changeProductData(product, productSizes));
-  }, [isError, isSuccess, id]);
+  }, [isSuccess, id]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();
   const sizesRef = useRef();
-  const isIntersectingSizes = useInView(sizesRef, product);
+  const isIntersectingSizes = useInView(sizesRef, transformedProduct);
   // AddToCart Btn intersecting end
 
   function handleAddToCart() {
@@ -76,17 +74,20 @@ export default function Product() {
             sizeQuantity: sizeQuantity,
           })
         );
+        dispatch(showAlert("Produkt dodany do koszyka!", "cart"));
       } else {
         setSelectedSize("Wybierz rozmiar");
         window.scrollTo({ top: sizesRef.current.offsetTop - 85 });
       }
-    } else
+    } else {
       dispatch(
         addToCart({
           id: transformedProduct.id,
           available: transformedProduct.available,
         })
       );
+      dispatch(showAlert("Produkt dodany do koszyka!", "cart"));
+    }
   }
 
   return (
@@ -147,7 +148,12 @@ export default function Product() {
                   {!isIntersectingSizes ? (
                     <div className="fixed-bottom fixed-btn d-md-none px-4 py-3 bg-white border-1 border-top shadow">
                       <Button
-                        variant={!selectedSize ? "dark" : "secondary"}
+                        variant={
+                          (transformedProduct.sizes && !selectedSize) ||
+                          selectedSize === "Wybierz rozmiar"
+                            ? "secondary"
+                            : "dark"
+                        }
                         ref={addToCartRef}
                         className="rounded-0 py-3 w-100"
                         onClick={() => handleAddToCart()}
@@ -158,7 +164,12 @@ export default function Product() {
                     </div>
                   ) : null}
                   <Button
-                    variant={!selectedSize ? "dark" : "secondary"}
+                    variant={
+                      (transformedProduct.sizes && !selectedSize) ||
+                      selectedSize === "Wybierz rozmiar"
+                        ? "secondary"
+                        : "dark"
+                    }
                     ref={addToCartRef}
                     className="rounded-0 py-3 mt-3 w-100"
                     onClick={() => handleAddToCart()}

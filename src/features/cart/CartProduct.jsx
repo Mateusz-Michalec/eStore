@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { Form, Col, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ProductPhoto from "../product/ProductPhoto/ProductPhoto";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart, updateQuantity } from "./cartSlice";
+import { getSizeQuantity } from "../sizes/sizesSlice";
 
 export default function CartProduct({ product }) {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
+
+  const sizeQuantity = useSelector((state) =>
+    getSizeQuantity(state, product.id, product?.size)
+  );
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
@@ -18,6 +23,22 @@ export default function CartProduct({ product }) {
         quantity: Number(e.target.value),
       })
     );
+  };
+
+  console.log(product);
+
+  const renderOptions = () => {
+    let options = [];
+    const maxQuantity = product.available || sizeQuantity;
+    for (let i = 1; i < 21; i++)
+      [
+        options.push(
+          <option disabled={i > maxQuantity} key={i} value={i}>
+            {i}
+          </option>
+        ),
+      ];
+    return options;
   };
 
   const handleDeleteItem = () => {
@@ -67,15 +88,7 @@ export default function CartProduct({ product }) {
                     aria-label="Wybór ilości"
                     className="rounded-0 me-3"
                   >
-                    {[...Array(20)].map((x, i) => (
-                      <option
-                        disabled={i + 1 > product.available}
-                        key={i + 1}
-                        value={i + 1}
-                      >
-                        {i + 1}
-                      </option>
-                    ))}
+                    {renderOptions()}
                   </Form.Select>
                   <button onClick={() => handleDeleteItem()}>
                     <i className="bi bi-trash fs-4"></i>

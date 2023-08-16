@@ -7,19 +7,27 @@ import { useSelector } from "react-redux";
 import { getCartItemsCount, selectCartItems } from "./cartSlice";
 import { useGetAllProductsQuery } from "../api/fakeStoreApi";
 import CartProductPlaceholder from "./CartProductPlaceholder/CartProductPlaceholder";
+import { selectSizes } from "../sizes/sizesSlice";
+import { changeProductData } from "../../utils/ProductDataManipulation";
 
 export default function Cart() {
   const cart = useSelector(selectCartItems);
   const cartLength = useSelector(getCartItemsCount);
-  const { data: allProducts, isLoading } = useGetAllProductsQuery();
+  const {
+    data: allProducts,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetAllProductsQuery();
+
+  const sizes = useSelector(selectSizes);
 
   const filterAllProducts = () =>
     cart.map((item) => {
       const product = allProducts?.find((product) => product.id === item.id);
+      const transformedProduct = changeProductData(product, sizes);
       return {
-        image: product?.image,
-        price: product?.price,
-        title: product?.title,
+        ...transformedProduct,
         ...item,
       };
     });
@@ -27,8 +35,8 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    setCartItems(filterAllProducts);
-  }, [isLoading, cart]);
+    if (isSuccess) setCartItems(filterAllProducts);
+  }, [isSuccess, cart]);
 
   const getTotalValue = () =>
     cartItems?.reduce(

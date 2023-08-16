@@ -7,6 +7,7 @@ import {
 } from "../../../features/favorites/favoritesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import "./ProductPhoto.scss";
+import { showAlert } from "../../alert/alertSlice";
 
 export default function ProductPhoto({ product, component }) {
   const dispatch = useDispatch();
@@ -18,6 +19,13 @@ export default function ProductPhoto({ product, component }) {
   // Modal Img End
 
   const isFavorite = useSelector((state) => checkIsFavorite(state, product.id));
+
+  const handleFavorite = () => {
+    dispatch(toggleFavorite(product.id));
+    if (isFavorite)
+      dispatch(showAlert("Usunięto produkt z ulubionych!", "favorites"));
+    else dispatch(showAlert("Dodano produkt do ulubionych!", "favorites"));
+  };
 
   let imgClass;
   switch (component) {
@@ -47,7 +55,7 @@ export default function ProductPhoto({ product, component }) {
         </Modal>
       ) : null}
       <section
-        className={` ${
+        className={`${
           component === "Cart"
             ? ""
             : "border shadow-sm d-flex position-relative align-items-center justify-content-center h-100"
@@ -70,7 +78,7 @@ export default function ProductPhoto({ product, component }) {
         {component !== "Cart" ? (
           <button
             className="position-absolute top-0 end-0 py-3 px-4"
-            onClick={() => dispatch(toggleFavorite(product.id))}
+            onClick={() => handleFavorite()}
           >
             <i
               className={`bi ${
