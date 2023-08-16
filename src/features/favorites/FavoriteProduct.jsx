@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Col, Stack } from "react-bootstrap";
 import Sizes from "../sizes/Sizes";
-import ProductPreview from "../product/ProductPreview";
+import ProductPreview from "../product/ProductPreview/ProductPreview";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../cart/cartSlice";
 import { getSizeQuantity } from "../sizes/sizesSlice";

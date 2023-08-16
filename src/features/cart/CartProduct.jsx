@@ -5,6 +5,7 @@ import ProductPhoto from "../product/ProductPhoto/ProductPhoto";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart, updateQuantity } from "./cartSlice";
 import { getSizeQuantity } from "../sizes/sizesSlice";
+import { showAlert } from "../alert/alertSlice";
 
 export default function CartProduct({ product }) {
   const dispatch = useDispatch();
@@ -25,8 +26,6 @@ export default function CartProduct({ product }) {
     );
   };
 
-  console.log(product);
-
   const renderOptions = () => {
     let options = [];
     const maxQuantity = product.available || sizeQuantity;
@@ -43,6 +42,7 @@ export default function CartProduct({ product }) {
 
   const handleDeleteItem = () => {
     dispatch(deleteFromCart({ id: product.id, size: product?.size }));
+    dispatch(showAlert("Usunięto produkt z koszyka!", "cart"));
   };
 
   return (

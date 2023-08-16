@@ -1,0 +1,12 @@
+@import "../../../assets/variables.scss";
+
+.product-preview {
+  &__title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &__placeholder {
+    height: calc($dimen-img-medium + 2rem);
+  }
+}

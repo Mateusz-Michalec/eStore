@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Row, Col } from "react-bootstrap";
-import ProductPreview from "../product/ProductPreview";
+import ProductPreview from "../product/ProductPreview/ProductPreview";
 import LastViewedPlaceholder from "./LastViewedPlaceholder/LastViewedPlaceholder";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,10 +58,7 @@ export const LastViewed = ({ productId }) => {
           <Row className="flex-nowrap">
             {lastViewedItems.map((product) => (
               <Col xs={8} sm={6} md={5} lg={3} xl={2} key={product.id}>
-                <ProductPreview
-                  product={product}
-                  component={"ProductsHistory"}
-                />
+                <ProductPreview product={product} component={"LastVieved"} />
               </Col>
             ))}
           </Row>

@@ -1,0 +1,10 @@
+.min-width-80px {
+  min-width: 80px;
+}
+
+.disabled {
+  pointer-events: none;
+  border-color: rgb(228, 228, 228) !important;
+  background: rgb(228, 228, 228) !important;
+  color: rgba(0, 0, 0, 0.5);
+}

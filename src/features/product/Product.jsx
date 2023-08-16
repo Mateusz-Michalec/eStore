@@ -56,7 +56,7 @@ export default function Product() {
   useEffect(() => {
     if (isSuccess)
       setTransformedProduct(changeProductData(product, productSizes));
-  }, [isSuccess, id]);
+  }, [isSuccess, id, isFetching]);
 
   // AddToCart Btn intersecting
   const addToCartRef = useRef();

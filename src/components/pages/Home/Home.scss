@@ -6,6 +6,10 @@
     max-height: 350px;
   }
 
+  &__hero-body {
+    top: 40px;
+  }
+
   &__category-col:hover {
     outline: 1px solid $color-primary;
     background: white;
@@ -13,5 +17,6 @@
 
   &__carousel-item {
     max-height: 200px;
+    object-fit: contain;
   }
 }

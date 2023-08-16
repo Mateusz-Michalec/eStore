@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Stack } from "react-bootstrap";
+import "./Sizes.scss";
 
 export default function Sizes({
   sizes,

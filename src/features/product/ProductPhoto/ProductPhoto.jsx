@@ -67,7 +67,7 @@ export default function ProductPhoto({ product, component }) {
           condition={component !== "Product"}
           children={
             <img
-              className={`product-photo ${imgClass} mx-auto my-4 d-block 
+              className={`product-photo w-100 ${imgClass} mx-auto my-4 d-block 
                 `}
               src={product.image}
               alt={product.title}

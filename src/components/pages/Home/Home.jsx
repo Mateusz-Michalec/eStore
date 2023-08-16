@@ -61,7 +61,7 @@ export default function Home() {
 
         <div className="position-relative p-0">
           <Link to="/products/category/jewelery">
-            <div className="hero-body position-absolute top-25 w-100 text-center text-main">
+            <div className="home__hero-body position-absolute top-25 w-100 text-center text-main">
               <h2 className="mb-1">Przygotuj się na lato</h2>
               <p className="mb-5">Modne dodatki w atrakcyjnych cenach.</p>
             </div>
@@ -124,7 +124,7 @@ export default function Home() {
                 <Carousel.Item key={product.id}>
                   <Link to={`/products/${product.id}`}>
                     <img
-                      className="d-block w-100 img-contain home__carousel-item"
+                      className="d-block w-100 home__carousel-item"
                       src={product.image}
                       alt={product.title}
                     />

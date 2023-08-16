@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Row, Col, Stack, Dropdown } from "react-bootstrap";
 import ProductPreviewPlaceholder from "./ProductInCategoryPlaceholder";
-import ProductPreview from "../ProductPreview";
+import ProductPreview from "../ProductPreview/ProductPreview";
 import PageHeader from "../../../components/common/PageHeader/PageHeader";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
@@ -23,8 +23,6 @@ export default function ProductsInCategory() {
     isFetching,
     refetch,
   } = useGetProductsByCategoryQuery({ categoryId: id, sortValue });
-
-  console.log(isLoading);
 
   const [displayedProducts, setDisplayedProducts] = useState([]);
 
