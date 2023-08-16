@@ -1,24 +1,15 @@
-import mathUtils from "./MathUtils";
+import { usdToPLN } from "./MathUtils";
 
-function changeProductData(product, sizes) {
+export function changeProductData(product, productSizes) {
+  const conditionalProperty =
+    product.category === "men's clothing" ||
+    product.category === "women's clothing"
+      ? { sizes: productSizes }
+      : { available: Number(product.id) + 3 };
+
   return {
     ...product,
-    price: mathUtils.usdToPLN(product.price),
-    sizes:
-      product.category === "men's clothing" ||
-      product.category === "women's clothing"
-        ? sizes[product.id]
-        : null,
-    available:
-      product.category !== "men's clothing" &&
-      product.category !== "women's clothing"
-        ? Math.floor(Math.random() * 20)
-        : null,
+    price: usdToPLN(product.price),
+    ...conditionalProperty,
   };
 }
-
-function changeProductsData(products, sizes) {
-  return products.map((product) => changeProductData(product, sizes));
-}
-
-export default { changeProductData, changeProductsData };

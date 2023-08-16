@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import ProductsHistory from "../Product/ProductsHistory";
+import LastViewed from "../../features/lastViewed/LastViewed";
 
-export default function Empty({ array, title }) {
+export default function Empty({ arrayLength, title }) {
   const navigate = useNavigate();
 
-  if (array.length === 0)
+  if (arrayLength === 0)
     return (
       <>
         <header>
@@ -16,11 +16,11 @@ export default function Empty({ array, title }) {
             onClick={() => navigate(-1)}
             className="mt-2 px-3 py-2"
           >
-            <i className="bi bi-arrow-left me-1 back-icon"></i> Powrót do
+            <i className="bi bi-arrow-left me-1 back-icon" /> Powrót do
             poprzedniej strony
           </Button>
         </header>
-        <ProductsHistory />
+        <LastViewed />
       </>
     );
   else return null;

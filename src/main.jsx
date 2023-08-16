@@ -1,16 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import { DataProvider } from "./context/dataContext.jsx";
-import { CartProvider } from "./context/CartContext.jsx";
-import { FavoritesProvider } from "./context/FavoritesContext.jsx";
+import { store } from "./app/store.js";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <DataProvider>
-    <CartProvider>
-      <FavoritesProvider>
-        <App />
-      </FavoritesProvider>
-    </CartProvider>
-  </DataProvider>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 );
