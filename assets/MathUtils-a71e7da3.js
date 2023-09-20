@@ -1,0 +1,1 @@
+function u(t){return Math.trunc(t*4.14)}function o(t){return Math.round(t*2)/2}function a(t){let n=new Set;for(;n.size<t;)n.add(Math.floor(Math.random()*20));return[...n]}function e(t){return t.reduce((n,r)=>n.rating.count>r.rating.count?n:r)}export{a,e as g,o as r,u};

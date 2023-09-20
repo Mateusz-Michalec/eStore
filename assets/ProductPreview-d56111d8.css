@@ -1,0 +1,1 @@
+.product-photo{cursor:pointer;object-fit:contain;transition:all .15s ease-in-out}.product-photo--small{max-height:7rem}.product-photo--medium{max-height:10rem}.product-photo--big{max-height:22rem}.product-photo:hover{transform:scale(.92)}.product-preview__title{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.product-preview__placeholder{height:12rem}
