@@ -1,0 +1,1 @@
+import{j as s}from"./index-5fbd5c71.js";function l({arrayLength:e,title:a}){return e>0?s.jsxs("header",{className:"mb-4 page-header",children:[s.jsx("h1",{className:"h2 page-header__title",children:a}),s.jsxs("p",{className:"text-secondary fs-7",children:[e," produkt",e>1&&e<=4?"y":e>4?"ów":""]})]}):null}export{l as P};
